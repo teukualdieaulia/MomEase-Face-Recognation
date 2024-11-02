@@ -1,0 +1,118 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:projectrekammedis/Component/AppColor.dart';
+
+import '../../Component/NavBattom.dart';
+
+class Jadwalpage extends StatefulWidget {
+  const Jadwalpage({super.key});
+
+  @override
+  State<Jadwalpage> createState() => _JadwalpageState();
+}
+
+class _JadwalpageState extends State<Jadwalpage> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      bottomNavigationBar: Bottomnavigation(currentIndex: 3),
+      backgroundColor: Appcolor.Primary,
+      body: Padding(
+          padding: EdgeInsets.only(bottom: 30, left: 10, right: 10),
+          child: Column(
+            children: [
+              SizedBox(
+                height: MediaQuery.of(context).size.height / 30,
+              ),
+              Row(
+                children: [
+                  IconButton(
+                      onPressed: () {},
+                      icon: Icon(
+                        Icons.arrow_back_ios_new,
+                        color: Appcolor.textPrimary,
+                      )),
+                  SizedBox(width: MediaQuery.of(context).size.width / 3.3),
+                  Text(
+                    "Jadwal",
+                    style: TextStyle(
+                        color: Appcolor.textPrimary,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20),
+                  ),
+                ],
+              ),
+              // Kalender picker
+
+              Container(
+                decoration: BoxDecoration(
+                  color: Appcolor.textPrimary,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: ListTile(
+                  title: Text(
+                    "Dr. Rizki Ananda STR.KOM",
+                    style: TextStyle(
+                        color: Appcolor.Primary,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 13),
+                  ),
+                  subtitle: Text(
+                    "Gynaekologi",
+                    style: TextStyle(
+                        color: Appcolor.Primary,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12),
+                  ),
+                  trailing: TextButton(
+                      style: TextButton.styleFrom(
+                          backgroundColor:
+                              const Color.fromARGB(255, 96, 175, 104)),
+                      onPressed: () {},
+                      child: Text(
+                        "Hubungi",
+                        style: TextStyle(color: Appcolor.Primary),
+                      )),
+                  leading: CircleAvatar(
+                    radius: 20,
+                    backgroundColor: Appcolor.Primary.withOpacity(0.5),
+                    child: const CircleAvatar(
+                      radius: 18,
+                      backgroundImage: AssetImage("Images/User/foto_rizki.png"),
+                    ),
+                  ),
+                ),
+              ),
+              SizedBox(
+                height: 20,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    "Control visit",
+                    style: TextStyle(color: Appcolor.textPrimary),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Appcolor.Card),
+                    child: Text("01",
+                        style: TextStyle(color: Appcolor.textPrimary)),
+                  ),
+                  Container(
+                    padding: EdgeInsets.symmetric(horizontal: 15, vertical: 5),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(10),
+                        color: Appcolor.Card),
+                    child: Text("14:30 - 15:30",
+                        style: TextStyle(color: Appcolor.textPrimary)),
+                  )
+                ],
+              )
+            ],
+          )),
+    );
+  }
+}

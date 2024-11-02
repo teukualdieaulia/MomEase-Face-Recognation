@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "982637508834",
+    "project_id": "medical-rekam",
+    "storage_bucket": "medical-rekam.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:982637508834:android:761bceb94b85b1b3b986bb",
+        "android_client_info": {
+          "package_name": "com.example.projectrekammedis"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCKYmQVEbUa5ELnwiFojj795WkHznqKqH4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
