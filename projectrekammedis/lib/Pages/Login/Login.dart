@@ -374,7 +374,8 @@ class _LoginState extends State<Login> {
                       Center(
                           child: Column(
                         children: [
-                          Text("Atau"),
+                          Text("Atau",
+                              style: TextStyle(color: Appcolor.textPrimary)),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [

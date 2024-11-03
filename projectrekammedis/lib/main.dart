@@ -4,6 +4,7 @@ import 'package:projectrekammedis/Pages/Auth_Detect_face/Auth_face.dart';
 import 'Component/test.dart';
 import 'Pages/Auth_Detect_face/login_face.dart';
 import 'Pages/Biodata/BiodataPage.dart';
+import 'Pages/GetStarted/Getstarted.dart';
 import 'Pages/Home/HomePage.dart';
 import 'Pages/Jadwal/JadwalPage.dart';
 import 'Pages/Keluhan/KeluhanPage.dart';
@@ -32,7 +33,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: "/Test",
+      initialRoute: "/Getstarted",
       defaultTransition: Transition.fadeIn,
       getPages: [
         GetPage(name: "/sign", page: () => const Sign()),
@@ -48,6 +49,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: "/Keluhanpage", page: () => const Keluhanpage()),
         GetPage(name: "/Jadwalpage", page: () => const Jadwalpage()),
         GetPage(name: "/Test", page: () => const Test()),
+        GetPage(name: "/Getstarted", page: () => const Getstarted()),
       ],
     );
   }
