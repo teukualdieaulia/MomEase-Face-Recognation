@@ -8,7 +8,7 @@ class Splashcren extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Future.delayed(const Duration(seconds: 4), () {
-      Get.offNamed("/Login");
+      Get.offNamed("/Getstarted");
     });
     return Scaffold(
         backgroundColor: Appcolor.Primary,

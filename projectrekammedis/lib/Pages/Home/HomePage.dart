@@ -1,8 +1,11 @@
 import 'package:badges/badges.dart' as badges;
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../Component/AppColor.dart';
 import '../../Component/NavBattom.dart';
+import 'package:get_storage/get_storage.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -12,11 +15,21 @@ class Homepage extends StatefulWidget {
 }
 
 class _HomepageState extends State<Homepage> {
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final box = GetStorage();
   bool _isChecked1 = false;
   bool _isChecked2 = false;
   bool _isChecked3 = false;
   bool _isChecked5 = false;
   bool _isChecked6 = false;
+
+  Map<String, dynamic>? userData;
+
+  @override
+  void initState() {
+    super.initState();
+    userData = box.read("userData");
+  }
 
   void _showCustomDialog(BuildContext context) {
     showGeneralDialog(
@@ -51,7 +64,7 @@ class _HomepageState extends State<Homepage> {
                   ListTile(
                     onTap: () {
                       Navigator.of(context).pop(); // Menutup dialog
-                      Get.toNamed('/Jadwalpage');
+                      Get.toNamed('/Profilpage');
                     },
                     title: Text(
                         style: TextStyle(color: Appcolor.textPrimary),
@@ -187,7 +200,7 @@ class _HomepageState extends State<Homepage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                "Selamat datang, ${Get.arguments ?? "Tamu"}",
+                                "Selamat datang, ${userData?['name'] ?? "Tamu"}",
                                 style: TextStyle(
                                     fontSize: 13, color: Appcolor.textPrimary),
                               ),

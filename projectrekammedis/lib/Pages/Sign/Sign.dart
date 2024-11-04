@@ -8,6 +8,7 @@ import 'package:get/get.dart';
 import 'package:projectrekammedis/Component/AppColor.dart';
 
 import '../Auth_Detect_face/Auth_face.dart';
+import '../Login/Login.dart';
 
 class Sign extends StatefulWidget {
   const Sign({super.key});
@@ -89,41 +90,94 @@ class _SignState extends State<Sign> {
         final chekEmail =
             await users?.where('email', isEqualTo: _emailController.text).get();
         if (chekUsername!.docs.isNotEmpty) {
-          Get.snackbar("Error", "Username telah digunakan",
-              backgroundColor: Colors.red,
-              colorText: Colors.white,
-              icon: Icon(Icons.error));
+          _showErrorDialog("Username telah digunakan");
           Navigator.of(context).pop();
         } else if (chekEmail!.docs.isNotEmpty) {
-          Get.snackbar("Error", "Email telah digunakan",
-              backgroundColor: Colors.red,
-              colorText: Colors.white,
-              icon: Icon(Icons.error));
+          _showErrorDialog("Email telah digunakan");
           Navigator.of(context).pop();
         } else {
           if (result != null) {
             await _uploadImageToFirebase(File(result!.path));
           } else {
-            Get.snackbar(
-                "Error", "Anda harus mendaftarkan wajah terlebih dahulu",
-                backgroundColor: Colors.red,
-                colorText: Colors.white,
-                icon: Icon(Icons.error));
+            _showErrorDialog("Wajah belum terdaftar");
+
             return; // Menghentikan eksekusi jika gambar wajah belum terdaftar
           }
           await users?.add(userData);
-          Get.snackbar("Berhasil", "Berhasil membuat akun",
-              backgroundColor: Colors.green,
-              colorText: Colors.white,
-              icon: Icon(Icons.check));
+          _showSuccessDialog("Akun Berhasil");
           Navigator.of(context).pop();
           Get.toNamed("/Login");
         }
       } catch (e) {
         Navigator.of(context).pop();
         print("Error: $e");
+      } finally {
+        // Pastikan dialog progress ditutup
+        Navigator.of(context).pop();
       }
     }
+  }
+
+  void _showSuccessDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "Berhasil",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Color(0xFF0B8FAC),
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                message,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20),
+              Image.asset("Images/Logo/Check.png", width: 70, height: 70),
+            ],
+          ),
+        );
+      },
+    ).then((_) {
+      Get.offAll(() => const Login());
+    });
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            "Error",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.red,
+            ),
+          ),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                message,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20),
+              Icon(Icons.error, color: Colors.red, size: 70),
+            ],
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -165,6 +219,7 @@ class _SignState extends State<Sign> {
                           ),
                           const SizedBox(height: 5),
                           TextFormField(
+                            style: const TextStyle(color: Appcolor.textPrimary),
                             controller: _nameController,
                             decoration: InputDecoration(
                               focusedBorder: OutlineInputBorder(
@@ -199,6 +254,7 @@ class _SignState extends State<Sign> {
                           ),
                           const SizedBox(height: 5),
                           TextFormField(
+                            style: const TextStyle(color: Appcolor.textPrimary),
                             controller: _emailController,
                             decoration: InputDecoration(
                               focusedBorder: OutlineInputBorder(
@@ -236,6 +292,7 @@ class _SignState extends State<Sign> {
                           ),
                           const SizedBox(height: 5),
                           TextFormField(
+                            style: const TextStyle(color: Appcolor.textPrimary),
                             controller: _phoneController,
                             focusNode: _phoneFocusNode,
                             inputFormatters: [PhoneNumberFormatter()],
@@ -247,7 +304,7 @@ class _SignState extends State<Sign> {
                                   color: Appcolor.Secondary),
                               hintStyle: const TextStyle(color: Colors.grey),
                               prefixStyle: const TextStyle(
-                                  color: Colors.black, fontSize: 15),
+                                  color: Appcolor.textPrimary, fontSize: 15),
                               hintText:
                                   _isFieldFocused ? null : "Masukan No.Telp",
                               prefixText: _isFieldFocused ? "+62 " : null,
@@ -287,6 +344,7 @@ class _SignState extends State<Sign> {
                           ),
                           const SizedBox(height: 5),
                           TextFormField(
+                            style: const TextStyle(color: Appcolor.textPrimary),
                             controller: _passwordController,
                             obscureText: _isObscure,
                             decoration: InputDecoration(

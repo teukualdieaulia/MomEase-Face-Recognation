@@ -65,10 +65,7 @@ class _AuthFaceState extends State<AuthFace> {
                               width: MediaQuery.of(context).size.width,
                               height: MediaQuery.of(context).size.height /
                                   controller!.value.aspectRatio,
-                              child: Transform(
-                                  alignment: Alignment.center,
-                                  transform: Matrix4.rotationY(3.14159),
-                                  child: CameraPreview(controller!)),
+                              child: CameraPreview(controller!),
                             ),
                             SizedBox(
                               height: 40,

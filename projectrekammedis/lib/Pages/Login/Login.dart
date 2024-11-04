@@ -5,8 +5,10 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:projectrekammedis/Component/AppColor.dart';
+import 'package:projectrekammedis/Pages/Home/HomePage.dart';
 import '../Auth_Detect_face/login_face.dart';
 import '../Biodata/BiodataPage.dart';
 
@@ -25,6 +27,10 @@ class _LoginState extends State<Login> {
   TextEditingController textControllerEmail = TextEditingController();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
   CollectionReference? users;
+  Map<String, dynamic>? userData;
+
+  String? uid;
+  final box = GetStorage();
 
   @override
   void initState() {
@@ -79,7 +85,7 @@ class _LoginState extends State<Login> {
       // Kirim kedua gambar ke server untuk verifikasi wajah
       final response = await http.post(
         Uri.parse(
-            'http://172.20.10.3:5000/authenticate'), // Ganti dengan IP server Anda
+            'http://10.140.172.242:5000/authenticate'), // Ganti dengan IP server Anda
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           "image1": image1Base64,
@@ -90,6 +96,12 @@ class _LoginState extends State<Login> {
       if (response.statusCode == 200) {
         final result = jsonDecode(response.body);
         if (result['status'] == 'sukses') {
+          DocumentSnapshot userDoc = await FirebaseFirestore.instance
+              .collection("users")
+              .doc(uid)
+              .get();
+          userData = userDoc.data() as Map<String, dynamic>;
+          await box.write("userData", userData);
           _showSuccessDialog("Autentikasi wajah berhasil!");
         } else {
           print('Authentication failed');
@@ -105,22 +117,27 @@ class _LoginState extends State<Login> {
     } catch (e) {
       print("Error: $e");
       Navigator.of(context).pop();
-      _showErrorDialog("Terjadi kesalahan.");
+      _showErrorDialog("Server tidak tersedia.");
     }
   }
 
   Future<void> login() async {
     if (formKey.currentState!.validate()) {
       try {
+        _ShowDialogProgress();
         final authentication = await users
             ?.where("email", isEqualTo: textControllerEmail.text)
             .where("password", isEqualTo: textControllerPass.text)
             .get();
 
         if (authentication!.docs.isNotEmpty) {
+          Navigator.of(context).pop();
+          uid = authentication.docs.first.id;
+
           // Panggil authenticateFaces untuk verifikasi wajah setelah login berhasil
           await authenticateFaces();
         } else {
+          Navigator.of(context).pop();
           _showErrorDialog("Username atau Password salah");
         }
       } catch (e) {
@@ -171,7 +188,7 @@ class _LoginState extends State<Login> {
         );
       },
     ).then((_) {
-      Get.offAll(() => const Biodatapage());
+      Get.offAll(() => const Homepage());
     });
   }
 
@@ -271,6 +288,7 @@ class _LoginState extends State<Login> {
                       ),
                       const SizedBox(height: 5),
                       TextFormField(
+                        style: const TextStyle(color: Appcolor.textPrimary),
                         controller: textControllerEmail,
                         decoration: InputDecoration(
                           hintText: "Masukan email...",
@@ -302,6 +320,7 @@ class _LoginState extends State<Login> {
                       ),
                       const SizedBox(height: 5),
                       TextFormField(
+                        style: const TextStyle(color: Appcolor.textPrimary),
                         controller: textControllerPass,
                         obscureText: _obscureText,
                         decoration: InputDecoration(
