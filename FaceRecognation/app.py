@@ -5,6 +5,7 @@ import base64
 from deepface import DeepFace
 import os
 
+    
 app = Flask(__name__)
 
 # Membuat direktori untuk menyimpan hasil crop
