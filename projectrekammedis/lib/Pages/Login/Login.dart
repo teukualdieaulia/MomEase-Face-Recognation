@@ -12,6 +12,7 @@ import 'package:http/http.dart' as http;
 import 'package:projectrekammedis/Component/AppColor.dart';
 import 'package:projectrekammedis/Pages/Home/HomePage.dart';
 import '../Auth_Detect_face/login_face.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -82,7 +83,8 @@ class _LoginState extends State<Login> {
       print("Gambar kedua berhasil di konversi ke Base64");
 
       // Kirim kedua gambar ke server untuk verifikasi wajah
-      final response = await http.post(
+      final response = await http
+          .post(
         Uri.parse(
             'http://172.20.10.3:5000/authenticate'), // Ganti dengan IP server Anda
         headers: {"Content-Type": "application/json"},
@@ -90,8 +92,11 @@ class _LoginState extends State<Login> {
           "image1": image1Base64,
           "image2": image2Base64,
         }),
-      );
-
+      )
+          .timeout(Duration(seconds: 5), onTimeout: () {
+        return http.Response('Timeout', 408);
+      });
+      Navigator.of(context).pop();
       if (response.statusCode == 200) {
         final result = jsonDecode(response.body);
         if (result['status'] == 'sukses') {
@@ -178,13 +183,48 @@ class _LoginState extends State<Login> {
 
   void _ShowDialogProgress() {
     showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return Center(
-            child: CircularProgressIndicator(),
-          );
-        });
+      context: context,
+      barrierDismissible: false,
+      builder: (BuildContext context) {
+        return Center(
+          child: Container(
+            padding: EdgeInsets.all(20),
+            width: 160, // Atur lebar container agar tidak terlalu besar
+            decoration: BoxDecoration(
+              color: Appcolor.Card,
+              borderRadius: BorderRadius.circular(15),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.2),
+                  blurRadius: 8,
+                  offset: Offset(0, 4),
+                ),
+              ],
+            ),
+            child: Column(
+              mainAxisSize:
+                  MainAxisSize.min, // Agar sesuai dengan tinggi konten
+              children: [
+                LoadingAnimationWidget.inkDrop(
+                  color: Appcolor.textPrimary,
+                  size: 40,
+                ),
+                SizedBox(height: 15),
+                Text(
+                  "Loading...",
+                  style: TextStyle(
+                    decoration: TextDecoration.none,
+                    color: Appcolor.textPrimary,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   void _showSuccessDialog(String message) {

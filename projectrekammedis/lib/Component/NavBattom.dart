@@ -50,16 +50,12 @@ class Bottomnavigation extends StatelessWidget {
                 style: TextStyle(color: Appcolor.Secondary),
               )),
           SalomonBottomBarItem(
-              icon: Icon(Icons.note_add_sharp, color: Appcolor.Secondary),
+              icon: Icon(Icons.question_answer, color: Appcolor.Secondary),
               title: Text(
-                'Keluhan',
+                'kuisioner',
                 style: TextStyle(color: Appcolor.Secondary),
               )),
           SalomonBottomBarItem(
-              activeIcon: Icon(
-                Icons.notifications_active,
-                color: Appcolor.Secondary,
-              ),
               icon: Icon(Icons.calendar_month, color: Appcolor.Secondary),
               title: Text(
                 'Jadwal',

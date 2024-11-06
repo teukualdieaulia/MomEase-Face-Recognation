@@ -14,7 +14,6 @@ class Homepage extends StatefulWidget {
   State<Homepage> createState() => _HomepageState();
 }
 
-
 class _HomepageState extends State<Homepage> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final box = GetStorage();
@@ -23,13 +22,17 @@ class _HomepageState extends State<Homepage> {
   bool _isChecked3 = false;
   bool _isChecked5 = false;
   bool _isChecked6 = false;
-
+  int waktu_kehamilan = 124;
+  late Color _colorHari;
+  late Color _colorMinggu;
   Map<String, dynamic>? userData;
 
   @override
   void initState() {
     super.initState();
-    userData = box.read("userData");
+    userData = box.read("userData") ?? {};
+    _colorHari = Appcolor.textPrimary;
+    _colorMinggu = Appcolor.Card;
   }
 
   void _showCustomDialog(BuildContext context) {
@@ -57,7 +60,7 @@ class _HomepageState extends State<Homepage> {
                     blurRadius: 10,
                     spreadRadius: 1,
                   ),
-                ],  
+                ],
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -231,11 +234,16 @@ class _HomepageState extends State<Homepage> {
                             children: [
                               Text(
                                 "Waktu kehamilan",
-                                style: TextStyle(color: Appcolor.Primary),
+                                style: TextStyle(
+                                    color: Appcolor.Primary,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18),
                               ),
                               const SizedBox(height: 10),
                               Text(
-                                "28 Minggu",
+                                _colorHari == Appcolor.textPrimary
+                                    ? "${waktu_kehamilan}  Hari"
+                                    : "${(waktu_kehamilan / 7).floor()}  Minggu",
                                 style: TextStyle(
                                     color: Appcolor.Primary,
                                     fontSize: 18,
@@ -257,32 +265,36 @@ class _HomepageState extends State<Homepage> {
                                     style: TextButton.styleFrom(
                                       elevation: 0,
                                       side: BorderSide(
-                                          color: Appcolor.textPrimary,
-                                          width: 2),
-                                      backgroundColor: Appcolor.textPrimary,
+                                          color: _colorMinggu, width: 2),
+                                      backgroundColor: _colorMinggu,
                                     ),
                                     onPressed: () {
-                                      setState(() {});
+                                      setState(() {
+                                        _colorMinggu = Appcolor.textPrimary;
+                                        _colorHari = Appcolor.Card;
+                                      });
                                     },
                                     child: Text(
                                       "Minggu",
                                       style: TextStyle(
-                                          color: Colors.black, fontSize: 12),
+                                          color: _colorHari, fontSize: 12),
                                     )),
                                 TextButton(
                                     style: TextButton.styleFrom(
-                                      elevation: 0,
-                                      side: BorderSide(
-                                          color: Appcolor.Card, width: 2),
-                                    ),
+                                        elevation: 0,
+                                        side: BorderSide(
+                                            color: _colorHari, width: 2),
+                                        backgroundColor: _colorHari),
                                     onPressed: () {
-                                      setState(() {});
+                                      setState(() {
+                                        _colorHari = Appcolor.textPrimary;
+                                        _colorMinggu = Appcolor.Card;
+                                      });
                                     },
                                     child: Text(
                                       "Hari",
                                       style: TextStyle(
-                                          color: Appcolor.textPrimary,
-                                          fontSize: 12),
+                                          color: _colorMinggu, fontSize: 12),
                                     ))
                               ],
                             ),
@@ -307,7 +319,10 @@ class _HomepageState extends State<Homepage> {
                               children: [
                                 Text(
                                   "Masukan keluhan",
-                                  style: TextStyle(color: Appcolor.Primary),
+                                  style: TextStyle(
+                                      color: Appcolor.Primary,
+                                      fontWeight: FontWeight.bold,
+                                      fontSize: 18),
                                 ),
                                 const SizedBox(height: 10),
                                 Text(
@@ -330,7 +345,9 @@ class _HomepageState extends State<Homepage> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 )),
-                            onPressed: () {},
+                            onPressed: () {
+                              
+                            },
                             icon: Icon(
                               Icons.arrow_forward,
                               color: Appcolor.textPrimary,

@@ -59,6 +59,7 @@ dependencies:
   date_picker_plus: ^4.1.0
   flutter_datetime_picker: ^1.5.1
   firebase_auth: ^5.3.1
+  water_drop_nav_bar: ^2.2.2
 
 dev_dependencies:
   flutter_test:
