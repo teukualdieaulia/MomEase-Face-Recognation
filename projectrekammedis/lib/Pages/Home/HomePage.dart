@@ -14,6 +14,7 @@ class Homepage extends StatefulWidget {
   State<Homepage> createState() => _HomepageState();
 }
 
+
 class _HomepageState extends State<Homepage> {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final box = GetStorage();
@@ -56,7 +57,7 @@ class _HomepageState extends State<Homepage> {
                     blurRadius: 10,
                     spreadRadius: 1,
                   ),
-                ],
+                ],  
               ),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
@@ -75,7 +76,7 @@ class _HomepageState extends State<Homepage> {
                   ListTile(
                     onTap: () {
                       Navigator.of(context).pop(); // Menutup dialog
-                      Get.toNamed('/Keluhanpage');
+                      Get.toNamed('/Settingspage');
                     },
                     title: Text(
                         style: TextStyle(color: Appcolor.textPrimary),

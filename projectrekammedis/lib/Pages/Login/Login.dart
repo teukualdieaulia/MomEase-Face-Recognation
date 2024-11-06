@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -10,7 +12,6 @@ import 'package:http/http.dart' as http;
 import 'package:projectrekammedis/Component/AppColor.dart';
 import 'package:projectrekammedis/Pages/Home/HomePage.dart';
 import '../Auth_Detect_face/login_face.dart';
-import '../Biodata/BiodataPage.dart';
 
 class Login extends StatefulWidget {
   const Login({super.key});
@@ -22,10 +23,10 @@ class Login extends StatefulWidget {
 class _LoginState extends State<Login> {
   bool _obscureText = true;
 
-  final formKey = GlobalKey<FormState>();
   TextEditingController textControllerPass = TextEditingController();
   TextEditingController textControllerEmail = TextEditingController();
   FirebaseFirestore firestore = FirebaseFirestore.instance;
+  FirebaseAuth auth = FirebaseAuth.instance;
   CollectionReference? users;
   Map<String, dynamic>? userData;
 
@@ -38,15 +39,14 @@ class _LoginState extends State<Login> {
     users = firestore.collection('users');
   }
 
-  Future<void> authenticateFaces() async {
+  Future<void> authenticateFaces(String uid) async {
     try {
       _ShowDialogProgress();
       // Ambil gambar pertama dari Firebase Storage
       print("Ambil gambar pertama dari Firebase Storage");
 
-      final storageRef = FirebaseStorage.instance
-          .ref()
-          .child('/Users/Pasien/${textControllerEmail.text}.jpg');
+      final storageRef =
+          FirebaseStorage.instance.ref().child('/Users/Pasien/${uid}.jpg');
       final imageUrl = await storageRef.getDownloadURL();
 
       // Ambil data gambar dari URL dan ubah menjadi Base64
@@ -54,8 +54,7 @@ class _LoginState extends State<Login> {
 
       final responseImage1 = await http.get(Uri.parse(imageUrl));
       // final gambar_asset = await rootBundle.load("Images/User/foto_rizki.png");
-      final gambar_asset2 =
-          await rootBundle.load("Images/User2/foto_rizki.png");
+
       if (responseImage1.statusCode != 200) {
         print("Tidak bisa mengambil gambar di database");
         return;
@@ -85,14 +84,14 @@ class _LoginState extends State<Login> {
       // Kirim kedua gambar ke server untuk verifikasi wajah
       final response = await http.post(
         Uri.parse(
-            'http://10.140.172.242:5000/authenticate'), // Ganti dengan IP server Anda
+            'http://172.20.10.3:5000/authenticate'), // Ganti dengan IP server Anda
         headers: {"Content-Type": "application/json"},
         body: jsonEncode({
           "image1": image1Base64,
           "image2": image2Base64,
         }),
       );
-      Navigator.of(context).pop();
+
       if (response.statusCode == 200) {
         final result = jsonDecode(response.body);
         if (result['status'] == 'sukses') {
@@ -105,13 +104,16 @@ class _LoginState extends State<Login> {
           _showSuccessDialog("Autentikasi wajah berhasil!");
         } else {
           print('Authentication failed');
+          Navigator.of(context).pop();
           _showErrorDialog("Autentikasi wajah gagal!");
         }
       } else if (response.statusCode == 400) {
         print('Authentication failed');
+        Navigator.of(context).pop();
         _showErrorDialog("Wajah tidak terdeteksi.");
       } else {
         print('Authentication failed');
+        Navigator.of(context).pop();
         _showErrorDialog("Gagal menghubungi server.");
       }
     } catch (e) {
@@ -122,31 +124,56 @@ class _LoginState extends State<Login> {
   }
 
   Future<void> login() async {
-    if (formKey.currentState!.validate()) {
-      try {
-        _ShowDialogProgress();
-        final authentication = await users
-            ?.where("email", isEqualTo: textControllerEmail.text)
-            .where("password", isEqualTo: textControllerPass.text)
-            .get();
+    try {
+      _ShowDialogProgress();
+      UserCredential userCredential = await auth.signInWithEmailAndPassword(
+        email: textControllerEmail.text.trim(),
+        password: textControllerPass.text.trim(),
+      );
+      User? user = userCredential.user;
 
-        if (authentication!.docs.isNotEmpty) {
-          Navigator.of(context).pop();
-          uid = authentication.docs.first.id;
-
-          // Panggil authenticateFaces untuk verifikasi wajah setelah login berhasil
-          await authenticateFaces();
-        } else {
-          Navigator.of(context).pop();
-          _showErrorDialog("Username atau Password salah");
-        }
-      } catch (e) {
-        print(e);
+      if (user != null) {
+        // Simpan UID ke box
+        uid = user.uid;
+        await box.write("uid", user.uid);
+        // Panggil authenticateFaces untuk verifikasi wajah setelah login berhasil
+        await authenticateFaces(user.uid);
+      } else {
+        Navigator.of(context).pop();
+        _showErrorDialog("Username atau Password salah");
       }
-
-      // textControllerEmail.clear();
-      // textControllerPass.clear();
+    } on FirebaseAuthException catch (e) {
+      // Menutup loading atau dialog sebelumnya jika ada
+      Navigator.of(context).pop();
+      switch (e.code) {
+        case "invalid-credential":
+          _showErrorDialog("Kredensial tidak valid");
+          break;
+        case "invalid-email":
+          _showErrorDialog("Format email tidak valid");
+          break;
+        case "operation-not-allowed":
+          _showErrorDialog("Login dengan metode ini tidak diizinkan");
+          break;
+        case 'user-disabled':
+          _showErrorDialog('Akun ini telah dinonaktifkan.');
+          break;
+        case 'user-not-found':
+          _showErrorDialog('Pengguna dengan email ini tidak ditemukan.');
+          break;
+        case 'wrong-password':
+          _showErrorDialog('Password yang Anda masukkan salah.');
+          break;
+        case 'too-many-requests':
+          _showErrorDialog('Terlalu banyak percobaan login. Coba lagi nanti.');
+          break;
+        default:
+          _showErrorDialog(
+              'Terjadi kesalahan. Periksa kembali data yang Anda masukkan.');
+      }
     }
+    // textControllerEmail.clear();
+    // textControllerPass.clear();
   }
 
   void _ShowDialogProgress() {
@@ -275,172 +302,168 @@ class _LoginState extends State<Login> {
                   style: TextStyle(color: Appcolor.textPrimary),
                 ),
                 const SizedBox(height: 30),
-                Form(
-                  key: formKey,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      const Text(
-                        "Email",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Appcolor.textPrimary),
-                      ),
-                      const SizedBox(height: 5),
-                      TextFormField(
-                        style: const TextStyle(color: Appcolor.textPrimary),
-                        controller: textControllerEmail,
-                        decoration: InputDecoration(
-                          hintText: "Masukan email...",
-                          hintStyle: const TextStyle(color: Colors.grey),
-                          prefixIcon: const Icon(
-                            Icons.mail_outline,
-                            color: Appcolor.Secondary,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Email",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Appcolor.textPrimary),
+                    ),
+                    const SizedBox(height: 5),
+                    TextFormField(
+                      style: const TextStyle(color: Appcolor.textPrimary),
+                      controller: textControllerEmail,
+                      decoration: InputDecoration(
+                        hintText: "Masukan email...",
+                        hintStyle: const TextStyle(color: Colors.grey),
+                        prefixIcon: const Icon(
+                          Icons.mail_outline,
+                          color: Appcolor.Secondary,
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Email tidak boleh kosong";
-                          } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
-                              .hasMatch(value)) {
-                            return "Format email tidak valid";
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 20),
-                      const Text(
-                        "Password",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Appcolor.textPrimary),
-                      ),
-                      const SizedBox(height: 5),
-                      TextFormField(
-                        style: const TextStyle(color: Appcolor.textPrimary),
-                        controller: textControllerPass,
-                        obscureText: _obscureText,
-                        decoration: InputDecoration(
-                          hintText: "Masukan password...",
-                          hintStyle: const TextStyle(color: Colors.grey),
-                          prefixIcon: const Icon(
-                            Icons.lock_outline,
-                            color: Appcolor.Secondary,
-                          ),
-                          suffixIcon: IconButton(
-                            onPressed: () {
-                              setState(() {
-                                _obscureText = !_obscureText;
-                              });
-                            },
-                            icon: Icon(_obscureText
-                                ? Icons.visibility_off
-                                : Icons.visibility),
-                            color: Appcolor.Secondary,
-                          ),
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return "Password tidak boleh kosong";
-                          }
-                          return null;
-                        },
                       ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.end,
-                        children: [
-                          TextButton(
-                            onPressed: () {},
-                            child: const Text(
-                              "Forgot Password?",
-                              style: TextStyle(color: Appcolor.Secondary),
-                            ),
-                          ),
-                        ],
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Email tidak boleh kosong";
+                        } else if (!RegExp(r'^[^@]+@[^@]+\.[^@]+')
+                            .hasMatch(value)) {
+                          return "Format email tidak valid";
+                        }
+                        return null;
+                      },
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      "Password",
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Appcolor.textPrimary),
+                    ),
+                    const SizedBox(height: 5),
+                    TextFormField(
+                      style: const TextStyle(color: Appcolor.textPrimary),
+                      controller: textControllerPass,
+                      obscureText: _obscureText,
+                      decoration: InputDecoration(
+                        hintText: "Masukan password...",
+                        hintStyle: const TextStyle(color: Colors.grey),
+                        prefixIcon: const Icon(
+                          Icons.lock_outline,
+                          color: Appcolor.Secondary,
+                        ),
+                        suffixIcon: IconButton(
+                          onPressed: () {
+                            setState(() {
+                              _obscureText = !_obscureText;
+                            });
+                          },
+                          icon: Icon(_obscureText
+                              ? Icons.visibility_off
+                              : Icons.visibility),
+                          color: Appcolor.Secondary,
+                        ),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
                       ),
-                      const SizedBox(height: 10),
-                      SizedBox(
-                        width: double.infinity,
-                        height: 50,
-                        child: ElevatedButton(
-                          style: ElevatedButton.styleFrom(
-                            elevation: 10,
-                            shadowColor: Colors.black,
-                            backgroundColor: Appcolor.Secondary,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                          onPressed: login,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Password tidak boleh kosong";
+                        }
+                        return null;
+                      },
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        TextButton(
+                          onPressed: () {},
                           child: const Text(
-                            "Login",
-                            style: TextStyle(
-                                color: Appcolor.Primary,
-                                fontSize: 20,
-                                fontWeight: FontWeight.bold),
+                            "Forgot Password?",
+                            style: TextStyle(color: Appcolor.Secondary),
                           ),
                         ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Center(
-                          child: Column(
-                        children: [
-                          Text("Atau",
-                              style: TextStyle(color: Appcolor.textPrimary)),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.facebook,
-                                  color: const Color.fromARGB(255, 3, 76, 135),
-                                  size: 40,
-                                ),
-                              ),
-                              SizedBox(width: 5),
-                              IconButton(
-                                onPressed: () {},
-                                icon: Icon(
-                                  Icons.email,
-                                  color: const Color.fromARGB(255, 167, 19, 9),
-                                  size: 40,
-                                ),
-                              )
-                            ],
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 50,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          elevation: 10,
+                          shadowColor: Colors.black,
+                          backgroundColor: Appcolor.Secondary,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                          SizedBox(
-                            height: 10,
-                          ),
-                          Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Text("Tidak punya akun ? ",
-                                  style:
-                                      TextStyle(color: Appcolor.textPrimary)),
-                              GestureDetector(
-                                onTap: () {
-                                  Get.toNamed("/sign");
-                                },
-                                child: Text(
-                                  "Daftar sekarang",
-                                  style: TextStyle(color: Appcolor.Secondary),
-                                ),
+                        ),
+                        onPressed: login,
+                        child: const Text(
+                          "Login",
+                          style: TextStyle(
+                              color: Appcolor.Primary,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Center(
+                        child: Column(
+                      children: [
+                        Text("Atau",
+                            style: TextStyle(color: Appcolor.textPrimary)),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.facebook,
+                                color: const Color.fromARGB(255, 3, 76, 135),
+                                size: 40,
                               ),
-                            ],
-                          )
-                        ],
-                      )),
-                    ],
-                  ),
+                            ),
+                            SizedBox(width: 5),
+                            IconButton(
+                              onPressed: () {},
+                              icon: Icon(
+                                Icons.email,
+                                color: const Color.fromARGB(255, 167, 19, 9),
+                                size: 40,
+                              ),
+                            )
+                          ],
+                        ),
+                        SizedBox(
+                          height: 10,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text("Tidak punya akun ? ",
+                                style: TextStyle(color: Appcolor.textPrimary)),
+                            GestureDetector(
+                              onTap: () {
+                                Get.toNamed("/sign");
+                              },
+                              child: Text(
+                                "Daftar sekarang",
+                                style: TextStyle(color: Appcolor.Secondary),
+                              ),
+                            ),
+                          ],
+                        )
+                      ],
+                    )),
+                  ],
                 ),
               ],
             ),

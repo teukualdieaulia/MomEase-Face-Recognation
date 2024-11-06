@@ -19,7 +19,7 @@ class _JadwalpageState extends State<Profilpage> {
   final box = GetStorage();
   Map<String, dynamic>? userData;
   bool isLoading = true;
-  bool isEditing = false;
+  bool isEditing = true;
   String? imageUrl;
   void initState() {
     super.initState();
@@ -93,6 +93,7 @@ class _JadwalpageState extends State<Profilpage> {
                 Form(
                   key: _formKey,
                   child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       SizedBox(
                         height: 20,
@@ -123,6 +124,8 @@ class _JadwalpageState extends State<Profilpage> {
                       SizedBox(
                         height: 20,
                       ),
+                      Text(" Nama :",
+                          style: TextStyle(color: Appcolor.textPrimary)),
                       TextFormField(
                         readOnly: isEditing,
                         decoration: InputDecoration(
@@ -134,14 +137,18 @@ class _JadwalpageState extends State<Profilpage> {
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10)),
                             ),
+                            hintStyle: TextStyle(color: Appcolor.textPrimary),
                             hintText: "${userData?['name']}"),
                       ),
                       SizedBox(
                         height: 20,
                       ),
+                      Text(" Email :",
+                          style: TextStyle(color: Appcolor.textPrimary)),
                       TextFormField(
                         readOnly: isEditing,
                         decoration: InputDecoration(
+                            hintStyle: TextStyle(color: Appcolor.textPrimary),
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 10),
                             border: OutlineInputBorder(
@@ -153,9 +160,12 @@ class _JadwalpageState extends State<Profilpage> {
                       SizedBox(
                         height: 20,
                       ),
+                      Text(" No HP :",
+                          style: TextStyle(color: Appcolor.textPrimary)),
                       TextFormField(
                         readOnly: isEditing,
                         decoration: InputDecoration(
+                            hintStyle: TextStyle(color: Appcolor.textPrimary),
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 10),
                             border: OutlineInputBorder(
@@ -171,6 +181,7 @@ class _JadwalpageState extends State<Profilpage> {
                   height: 20,
                 ),
                 SizedBox(
+                  width: MediaQuery.of(context).size.width / 1.5,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                           backgroundColor: Appcolor.Secondary,
@@ -178,12 +189,56 @@ class _JadwalpageState extends State<Profilpage> {
                             borderRadius: BorderRadius.circular(10),
                           )),
                       onPressed: () {},
-                      child: Text(
-                        "Simpan perubahaan",
-                        style: TextStyle(
-                            fontSize: 17,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.save,
                             color: Appcolor.Primary,
-                            fontWeight: FontWeight.bold),
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Simpan ",
+                            style: TextStyle(
+                                fontSize: 17,
+                                color: Appcolor.Primary,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
+                      )),
+                ),
+                SizedBox(
+                  height: 20,
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width / 1.5,
+                  child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.red,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          )),
+                      onPressed: () {},
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.logout,
+                            color: Appcolor.Primary,
+                          ),
+                          SizedBox(
+                            width: 10,
+                          ),
+                          Text(
+                            "Logout",
+                            style: TextStyle(
+                                fontSize: 17,
+                                color: Appcolor.Primary,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        ],
                       )),
                 )
               ],
