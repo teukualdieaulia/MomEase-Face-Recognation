@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -15,12 +17,38 @@ class Settingspage extends StatefulWidget {
 class _SettingspageState extends State<Settingspage> {
   final box = GetStorage();
   Map<String, dynamic>? userData;
+  Map<String, dynamic>? Biodata;
+  bool? notif;
+  String? uid;
+  String? imageUrl;
+  bool isLoading = true;
 
   Future<void> AmbilSemuaData() async {
     try {
-      userData = box.read("userData");
+      uid = box.read("uidAktif");
+      print("UID : $uid");
+      userData = box.read(uid!) ?? {};
     } catch (e) {
       print("Error AmbilSemuaData : $e");
+    }
+  }
+
+  Future<void> Ambilgambar() async {
+    try {
+      if (userData != null && uid != null) {
+        final storagef =
+            FirebaseStorage.instance.ref().child("/Users/Pasien/$uid.jpg");
+        final url = await storagef.getDownloadURL();
+        setState(() {
+          imageUrl = url;
+        });
+      }
+    } catch (e) {
+      print("Error AmbilDataGambar : $e");
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
@@ -28,6 +56,14 @@ class _SettingspageState extends State<Settingspage> {
   void initState() {
     super.initState();
     AmbilSemuaData();
+    Ambilgambar();
+    if (userData!['Biodata'] != null) {
+      notif = true;
+      print("Lengkapi diri terisi");
+    } else {
+      print("Lengkapi diri");
+      notif = false;
+    }
   }
 
   @override
@@ -53,7 +89,10 @@ class _SettingspageState extends State<Settingspage> {
                   color: Appcolor.Card,
                   borderRadius: BorderRadius.circular(10),
                 ),
-                child: lisTileAccount(userData: userData),
+                child: lisTileAccount(
+                    userData: userData,
+                    imageUrl: imageUrl,
+                    isloading: isLoading),
               ),
               Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
@@ -99,10 +138,13 @@ class _SettingspageState extends State<Settingspage> {
                           "Lihat ketentuan penggunaan dan kebijakan privasi kami",
                     ),
                     lisTileCard(
-                      onTap: () => Get.toNamed('/LengkapiData'),
-                      leading: Icon(Icons.info,
-                          color: Appcolor
-                              .textPrimary), // Ikon untuk "Lengkapi Data"
+                      onTap: () => Get.toNamed('/Biodatapage'),
+                      color: notif == true ? Colors.green : Colors.amber,
+                      leading: notif == true
+                          ? Icon(Icons.check_circle_outline_outlined)
+                          : Icon(Icons.info,
+                              color: Appcolor
+                                  .textPrimary), // Ikon untuk "Lengkapi Data"
                       title: "Lengkapi Data",
                       subtitle: "Lengkapi data diri Anda",
                     ),
@@ -166,7 +208,11 @@ class lisTileAccount extends StatelessWidget {
   const lisTileAccount({
     super.key,
     required this.userData,
+    required this.isloading,
+    this.imageUrl,
   });
+  final bool isloading;
+  final String? imageUrl;
 
   final Map<String, dynamic>? userData;
 
@@ -174,11 +220,18 @@ class lisTileAccount extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: CircleAvatar(
-        child: Icon(
-          Icons.person,
-          color: Appcolor.textPrimary,
-          size: 35,
-        ),
+        child: isloading
+            ? CircularProgressIndicator()
+            : imageUrl != null
+                ? CircleAvatar(
+                    backgroundImage: NetworkImage(imageUrl!),
+                    radius: 20,
+                  )
+                : Icon(
+                    Icons.person,
+                    color: Appcolor.textPrimary,
+                    size: 35,
+                  ),
         radius: 20,
       ),
       subtitle: Text(

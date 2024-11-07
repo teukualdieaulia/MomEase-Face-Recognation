@@ -21,19 +21,21 @@ class _JadwalpageState extends State<Profilpage> {
   bool isLoading = true;
   bool isEditing = true;
   String? imageUrl;
+  String? uid;
+
   void initState() {
     super.initState();
-
+    uid = box.read("uidAktif");
+    userData = box.read(uid!) ?? {};
+    print("UID : $uid");
     AmbilDataGambar();
   }
 
   Future<void> AmbilDataGambar() async {
-    try {
-      userData = box.read("userData");
-      if (userData != null && userData!['email'] != null) {
-        final storageRef = FirebaseStorage.instance
-            .ref()
-            .child('/Users/Pasien/${userData!['email']}.jpg');
+    try { 
+      if (userData != null && uid != null) {
+        final storageRef =
+            FirebaseStorage.instance.ref().child('/Users/Pasien/${uid}.jpg');
         final url = await storageRef.getDownloadURL();
         setState(() {
           imageUrl = url;

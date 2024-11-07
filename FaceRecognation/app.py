@@ -4,8 +4,8 @@ import cv2
 import base64
 from deepface import DeepFace
 import os
+import time
 
-    
 app = Flask(__name__)
 
 # Membuat direktori untuk menyimpan hasil crop
@@ -17,14 +17,17 @@ def calculate_distance(embedding1, embedding2):
     return np.linalg.norm(embedding1_vector - embedding2_vector)
 
 def save_cropped_face(image, filename):
-    # Deteksi dan crop wajah dengan extract_faces
-    faces = DeepFace.extract_faces(image, detector_backend="opencv", enforce_detection=False)
+    start_time = time.time()
+    faces = DeepFace.extract_faces(image, detector_backend="mtcnn", enforce_detection=True)
+    end_time = time.time()
+    print(f"Time taken to detect face: {end_time - start_time} seconds")
     if faces:
-        # Menggunakan wajah pertama yang terdeteksi
-        detected_face = faces[0]["face"]
-        face_image = (detected_face * 255).astype(np.uint8)  # Konversi ke skala 8-bit
+        detected_face = faces[0]
+        # Konversi wajah terdeteksi ke skala 8-bit untuk disimpan
+        face_image = (detected_face["face"] * 255).astype(np.uint8)
         face_image_bgr = cv2.cvtColor(face_image, cv2.COLOR_RGB2BGR)
         cv2.imwrite(f"cropped_faces/{filename}.jpg", face_image_bgr)
+        
     else:
         print(f"No face detected for {filename}")
 
@@ -48,19 +51,26 @@ def authenticate():
 
     # Deteksi wajah dan ekstraksi embedding dengan DeepFace
     try:
-        embedding1 = DeepFace.represent(image1, model_name="Facenet")
-        embedding2 = DeepFace.represent(image2, model_name="Facenet")
+        start_embedding_time = time.time()
+        embedding1 = DeepFace.represent(image1, model_name="Facenet", detector_backend="mtcnn")
+        embedding2 = DeepFace.represent(image2, model_name="Facenet", detector_backend="mtcnn")
+        end_embedding_time = time.time()
+        print(f"Ekstraksi embedding membutuhkan waktu {end_embedding_time - start_embedding_time} detik")
+        
         print("Embedding1:", embedding1)
         print("Embedding2:", embedding2)
     except ValueError:
         return jsonify({"error": "Tidak ada wajah yang terdeteksi"}), 400
 
     # Hitung jarak antara kedua embedding
+    start_distance_time = time.time()
     distance = calculate_distance(embedding1, embedding2)
+    end_distance_time = time.time()
     print("Distance:", distance)
+    print(f"Hitung jarak membutuhkan waktu {end_distance_time - start_distance_time} detik")
     
     # Threshold untuk FaceNet biasanya di sekitar 1.0, bisa disesuaikan
-    threshold = 8.5
+    threshold = 6.5
     if distance < threshold:
         return jsonify({"status": "sukses", "message": "Autentikasi berhasil"})
     else:

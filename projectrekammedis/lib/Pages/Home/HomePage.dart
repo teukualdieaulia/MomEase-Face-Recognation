@@ -30,7 +30,8 @@ class _HomepageState extends State<Homepage> {
   @override
   void initState() {
     super.initState();
-    userData = box.read("userData") ?? {};
+    final uid = box.read("uidAktif");
+    userData = box.read(uid) ?? {};
     _colorHari = Appcolor.textPrimary;
     _colorMinggu = Appcolor.Card;
   }
@@ -100,8 +101,9 @@ class _HomepageState extends State<Homepage> {
                   Divider(),
                   ListTile(
                     onTap: () {
-                      Navigator.of(context).pop(); // Menutup dialog
-                      Get.toNamed('/Login');
+                      box.erase().then((_) {
+                        Get.offAllNamed('/Login');
+                      });
                     },
                     title: Text(
                       "Logout",
@@ -345,9 +347,7 @@ class _HomepageState extends State<Homepage> {
                                 shape: RoundedRectangleBorder(
                                   borderRadius: BorderRadius.circular(10),
                                 )),
-                            onPressed: () {
-                              
-                            },
+                            onPressed: () {},
                             icon: Icon(
                               Icons.arrow_forward,
                               color: Appcolor.textPrimary,

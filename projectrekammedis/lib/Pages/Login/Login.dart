@@ -93,7 +93,7 @@ class _LoginState extends State<Login> {
           "image2": image2Base64,
         }),
       )
-          .timeout(Duration(seconds: 5), onTimeout: () {
+          .timeout(Duration(seconds: 40), onTimeout: () {
         return http.Response('Timeout', 408);
       });
       Navigator.of(context).pop();
@@ -105,7 +105,8 @@ class _LoginState extends State<Login> {
               .doc(uid)
               .get();
           userData = userDoc.data() as Map<String, dynamic>;
-          await box.write("userData", userData);
+          await box.write(uid, userData);
+          await box.write("uidAktif", uid);
           _showSuccessDialog("Autentikasi wajah berhasil!");
         } else {
           print('Authentication failed');
@@ -138,10 +139,6 @@ class _LoginState extends State<Login> {
       User? user = userCredential.user;
 
       if (user != null) {
-        // Simpan UID ke box
-        uid = user.uid;
-        await box.write("uid", user.uid);
-        // Panggil authenticateFaces untuk verifikasi wajah setelah login berhasil
         await authenticateFaces(user.uid);
       } else {
         Navigator.of(context).pop();

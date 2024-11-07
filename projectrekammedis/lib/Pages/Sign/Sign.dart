@@ -6,6 +6,7 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:projectrekammedis/Component/AppColor.dart';
 
 import '../Auth_Detect_face/Auth_face.dart';
@@ -23,7 +24,8 @@ class _SignState extends State<Sign> {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
-  FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final box = GetStorage();
   final FirebaseAuth _auth = FirebaseAuth.instance;
   String? _selectRole;
 
