@@ -1,7 +1,3 @@
-Berikut adalah `README.md` yang diperbarui berdasarkan struktur yang Anda berikan, yaitu direktori utama `MomEase-Face-Recognation` dengan sub-direktori `FaceRecognition` yang berisi file `app.py`.
-
----
-
 # MomEase - Sistem Rekam Medis dengan Autentikasi Pengenalan Wajah
 
 MomEase adalah aplikasi manajemen rekam medis modern yang dirancang untuk memudahkan, mengamankan, dan mengelola data pasien secara efisien. Aplikasi ini menggunakan teknologi **DeepFace** untuk autentikasi wajah, memastikan hanya pengguna yang berwenang yang dapat mengakses informasi medis sensitif.
