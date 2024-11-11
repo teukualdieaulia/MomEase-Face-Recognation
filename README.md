@@ -1,136 +1,147 @@
-Berikut adalah pembaruan `README.md` untuk proyek **MomEase** yang menggunakan **Firebase** sebagai database dan **DeepFace** untuk face recognition:
+Berikut adalah `README.md` yang diperbarui berdasarkan struktur yang Anda berikan, yaitu direktori utama `MomEase-Face-Recognation` dengan sub-direktori `FaceRecognition` yang berisi file `app.py`.
 
 ---
 
-# MomEase - Medical Record System with Face Recognition Authentication
+# MomEase - Sistem Rekam Medis dengan Autentikasi Pengenalan Wajah
 
-MomEase is a modern medical record management application designed for easy, secure, and efficient handling of patient records. It leverages **DeepFace** technology for facial recognition, providing a seamless and secure authentication experience to ensure that only authorized users have access to sensitive medical information.
+MomEase adalah aplikasi manajemen rekam medis modern yang dirancang untuk memudahkan, mengamankan, dan mengelola data pasien secara efisien. Aplikasi ini menggunakan teknologi **DeepFace** untuk autentikasi wajah, memastikan hanya pengguna yang berwenang yang dapat mengakses informasi medis sensitif.
 
-## Table of Contents
+## Daftar Isi
 
-- [Features](#features)
-- [Technology Stack](#technology-stack)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Project Structure](#project-structure)
-- [Contributing](#contributing)
-- [License](#license)
+- [Fitur](#fitur)
+- [Teknologi yang Digunakan](#teknologi-yang-digunakan)
+- [Instalasi](#instalasi)
+- [Penggunaan](#penggunaan)
+- [Struktur Proyek](#struktur-proyek)
+- [Kontribusi](#kontribusi)
+- [Lisensi](#lisensi)
 
 ---
 
-## Features
+## Fitur
 
-- **Face Recognition Authentication**: Secure and effortless authentication using DeepFace, providing a user-friendly login experience.
-- **Comprehensive Medical Record Management**: Record, update, and manage patient data efficiently.
-- **Data Privacy and Security**: Ensures sensitive data is protected and accessible only by authorized users.
-- **User-Friendly Interface**: A clean, intuitive design that allows easy navigation and interaction with records.
-- **Scalable and Extensible**: Designed with a flexible architecture for future enhancements and integration with other health systems.
+- **Autentikasi Pengenalan Wajah**: Autentikasi aman menggunakan DeepFace, memberikan pengalaman login yang mudah dan aman.
+- **Manajemen Rekam Medis Komprehensif**: Mencatat, memperbarui, dan mengelola data pasien dengan efisien.
+- **Privasi dan Keamanan Data**: Menjamin bahwa data sensitif dilindungi dan hanya dapat diakses oleh pengguna yang berwenang.
+- **Antarmuka Ramah Pengguna**: Desain yang bersih dan intuitif memudahkan navigasi dan interaksi dengan rekam medis.
+- **Skalabilitas dan Ekstensibilitas**: Dirancang dengan arsitektur fleksibel untuk pengembangan fitur lebih lanjut dan integrasi dengan sistem kesehatan lainnya.
 
-## Technology Stack
+## Teknologi yang Digunakan
 
 - **Frontend**: Flutter
-- **Backend**: Firebase for data storage and authentication
-- **Face Recognition**: DeepFace library for face recognition
-- **Authentication**: Firebase Authentication for user management
-- **Version Control**: Git & GitHub
+- **Backend**: Firebase untuk penyimpanan data dan autentikasi
+- **Pengenalan Wajah**: DeepFace untuk autentikasi wajah
+- **Autentikasi**: Firebase Authentication untuk manajemen pengguna
+- **Kontrol Versi**: Git & GitHub
 
-## Installation
+## Instalasi
 
-### Prerequisites
+### Prasyarat
 
-1. **Flutter SDK**: Ensure Flutter is installed. You can download it from [Flutter’s official website](https://flutter.dev/docs/get-started/install).
-2. **Firebase Account**: Set up a Firebase project in [Firebase Console](https://console.firebase.google.com/).
-3. **DeepFace**: Ensure you have Python installed to use DeepFace for face recognition. DeepFace can be installed via pip.
+1. **Flutter SDK**: Pastikan Flutter sudah terinstal. Anda bisa mendownloadnya dari [situs resmi Flutter](https://flutter.dev/docs/get-started/install).
+2. **Akun Firebase**: Buat proyek Firebase di [Firebase Console](https://console.firebase.google.com/).
+3. **DeepFace**: Pastikan Python sudah terinstal untuk menggunakan DeepFace. DeepFace bisa diinstal melalui pip.
 
-### Steps
+### Langkah-Langkah Instalasi
 
-1. **Clone the repository**
+1. **Clone repository**
 
    ```bash
    git clone https://github.com/riskiananda90/MomEase-Face-Recognation.git
    cd MomEase-Face-Recognation
    ```
 
-2. **Set Up Firebase**
+2. **Konfigurasi Firebase**
 
-   - Go to your Firebase Console, create a new project, and enable **Firestore Database** and **Firebase Authentication**.
-   - Download the `google-services.json` file for Android and `GoogleService-Info.plist` for iOS and add them to the appropriate directories in your Flutter project.
+   - Masuk ke Firebase Console, buat proyek baru, dan aktifkan **Firestore Database** dan **Firebase Authentication**.
+   - Download file `google-services.json` untuk Android dan `GoogleService-Info.plist` untuk iOS, lalu tambahkan ke direktori yang sesuai di proyek Flutter Anda.
 
 3. **Install Dependencies**
 
-   - **Flutter dependencies**: Navigate to the Flutter project directory and run:
+   - **Dependensi Flutter**: Arahkan ke direktori proyek Flutter dan jalankan:
      ```bash
      flutter pub get
      ```
 
-   - **DeepFace for Face Recognition**: Install DeepFace via pip (requires Python):
+   - **DeepFace untuk Pengenalan Wajah**: Masuk ke direktori `FaceRecognition` dan instal DeepFace melalui pip (membutuhkan Python):
      ```bash
+     cd FaceRecognition
      pip install deepface
      ```
 
-4. **Environment Variables (Optional)**
+4. **Variabel Lingkungan (Opsional)**
 
-   If you are using environment-specific configurations, you can set them up using `.env` files for Firebase keys, API keys, or other settings.
+   Jika Anda menggunakan konfigurasi khusus berdasarkan lingkungan, Anda bisa mengaturnya menggunakan file `.env` untuk kunci Firebase, API keys, atau pengaturan lainnya.
 
-5. **Run the Application**
+5. **Jalankan Aplikasi**
 
-   - **Backend**: If there is a separate backend for any additional processing, start it here.
-   - **Frontend**: Run the Flutter app
+   - **FaceRecognition Backend**: Jalankan `app.py` di direktori `FaceRecognition` untuk mengaktifkan modul pengenalan wajah.
+     ```bash
+     python app.py
+     ```
+
+   - **Frontend**: Jalankan aplikasi Flutter
      ```bash
      flutter run
      ```
 
-## Usage
+## Penggunaan
 
-1. **Sign Up / Log In**: Users can sign up or log in using face recognition. Upon login, DeepFace will verify the user’s face against the saved data in Firebase.
-2. **View Medical Records**: Authorized users can view, edit, and manage their medical records stored in Firebase Firestore.
-3. **Update Profile and Preferences**: Users can update their personal details and configure settings.
-4. **Data Security**: Sensitive information is securely stored and accessible only to authenticated users.
+1. **Sign Up / Log In**: Pengguna bisa mendaftar atau masuk menggunakan pengenalan wajah. Saat login, DeepFace akan memverifikasi wajah pengguna dengan data yang disimpan di Firebase.
+2. **Lihat Rekam Medis**: Pengguna yang berwenang bisa melihat, mengedit, dan mengelola rekam medis yang disimpan di Firebase Firestore.
+3. **Perbarui Profil dan Preferensi**: Pengguna bisa memperbarui detail pribadi dan mengatur preferensi.
+4. **Keamanan Data**: Informasi sensitif disimpan dengan aman dan hanya dapat diakses oleh pengguna yang telah diautentikasi.
 
-## Project Structure
+## Struktur Proyek
 
 ```
 MomEase-Face-Recognation/
-├── lib/                    # Main Flutter application code
-│   ├── screens/            # Screens for different pages in the app
-│   ├── services/           # Services for Firebase and DeepFace integration
-│   └── widgets/            # Custom reusable widgets
-├── assets/                 # Assets like images and fonts
-└── backend/                # (Optional) Any additional backend services
+├── FaceRecognition/        # Direktori untuk modul pengenalan wajah
+│   └── app.py              # File utama untuk pengenalan wajah menggunakan DeepFace
+├── lib/                    # Kode utama aplikasi Flutter
+│   ├── --------/           # Halaman untuk berbagai fitur dalam aplikasi
+│   ├── --------/           # Layanan untuk integrasi Firebase dan pemanggilan FaceRecognition
+│   └── -------/            # Komponen widget yang dapat digunakan kembali
+├── assets/                 # Aset seperti gambar dan font
+└── backend/                # (Opsional) Layanan backend tambahan
 ```
 
-## Contributing
+- **FaceRecognition**: Direktori khusus untuk modul pengenalan wajah menggunakan DeepFace, berisi file `app.py`.
+  - **app.py**: File Python utama untuk pengenalan wajah yang dapat berfungsi sebagai server API jika aplikasi Flutter memerlukan pemanggilan eksternal untuk verifikasi wajah.
+- **lib**: Kode utama aplikasi Flutter.
+  - **screens**: Halaman aplikasi (seperti halaman login, halaman rekam medis, dll.).
+  - **services**: Layanan untuk integrasi Firebase dan pemanggilan ke `app.py` di FaceRecognition (jika ada).
+  - **widgets**: Komponen antarmuka yang dapat digunakan kembali.
+- **assets**: Aset aplikasi, seperti gambar dan font.
 
-Contributions are welcome! To contribute:
+## Kontribusi
 
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Make your changes and commit them (`git commit -m 'Add some feature'`).
-4. Push to the branch (`git push origin feature-branch`).
-5. Create a Pull Request.
+Kontribusi sangat terbuka! Untuk berkontribusi:
 
-Please ensure your code adheres to the project’s coding conventions and includes relevant tests.
+1. Fork repository ini.
+2. Buat branch baru (`git checkout -b feature-branch`).
+3. Lakukan perubahan Anda dan commit (`git commit -m 'Add some feature'`).
+4. Push ke branch (`git push origin feature-branch`).
+5. Buat Pull Request.
 
-## License
+Pastikan kode Anda sesuai dengan standar proyek dan mencakup pengujian yang relevan.
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## Lisensi
+
+Proyek ini dilisensikan di bawah MIT License - lihat file [LICENSE](LICENSE) untuk informasi lebih lanjut.
 
 ---
 
-By leveraging **MomEase** for medical records, healthcare providers and patients can enjoy a secure, user-friendly, and efficient way to manage and access health information, powered by face recognition for enhanced security.
+Dengan menggunakan **MomEase** untuk rekam medis, penyedia layanan kesehatan dan pasien dapat menikmati cara yang aman, ramah pengguna, dan efisien untuk mengelola dan mengakses informasi kesehatan, yang diperkuat dengan autentikasi pengenalan wajah.
 
 ---
 
 ### Screenshots
 
-(Add screenshots of the app interface here for better visualization.)
+
 
 ---
 
-### Contact
+### Kontak
 
-For any questions or suggestions, feel free to reach out to the project maintainer at [riskiananda90 on GitHub](https://github.com/riskiananda90).
-
----
-
-README ini memberikan informasi yang jelas dan terstruktur tentang proyek **MomEase**, mencakup teknologi yang digunakan, instalasi, dan cara penggunaannya.
+Untuk pertanyaan atau saran, jangan ragu untuk menghubungi pengelola proyek di [riskiananda90 on GitHub](https://github.com/riskiananda90).
