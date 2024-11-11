@@ -32,7 +32,7 @@ class _JadwalpageState extends State<Profilpage> {
   }
 
   Future<void> AmbilDataGambar() async {
-    try { 
+    try {
       if (userData != null && uid != null) {
         final storageRef =
             FirebaseStorage.instance.ref().child('/Users/Pasien/${uid}.jpg');
@@ -55,7 +55,7 @@ class _JadwalpageState extends State<Profilpage> {
     return Scaffold(
       backgroundColor: Appcolor.Primary,
       appBar: AppBar(
-        backgroundColor: Appcolor.Card,
+        backgroundColor: Appcolor.Primary,
         centerTitle: true,
         actions: [
           IconButton(
@@ -79,8 +79,9 @@ class _JadwalpageState extends State<Profilpage> {
             color: Appcolor.textPrimary,
           ),
         ),
-        title:
-            const Text("Profil", style: TextStyle(color: Appcolor.textPrimary)),
+        title: const Text("Profil",
+            style: TextStyle(
+                color: Appcolor.textPrimary, fontWeight: FontWeight.bold)),
       ),
       // bottomNavigationBar: Bottomnavigation(currentIndex: ,),
       body: GestureDetector(
@@ -104,7 +105,7 @@ class _JadwalpageState extends State<Profilpage> {
                         child: SizedBox(
                           child: CircleAvatar(
                             radius: 85,
-                            backgroundColor: Appcolor.Card,
+                            backgroundColor: Appcolor.textPrimary,
                             child: isLoading
                                 ? CircularProgressIndicator()
                                 : imageUrl != null
@@ -131,11 +132,17 @@ class _JadwalpageState extends State<Profilpage> {
                       TextFormField(
                         readOnly: isEditing,
                         decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Appcolor.textPrimary, width: 2),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 10),
                             border: OutlineInputBorder(
                               borderSide:
-                                  BorderSide(color: Appcolor.Card, width: 2),
+                                  BorderSide(color: Appcolor.Primary, width: 2),
                               borderRadius:
                                   BorderRadius.all(Radius.circular(10)),
                             ),
@@ -150,6 +157,12 @@ class _JadwalpageState extends State<Profilpage> {
                       TextFormField(
                         readOnly: isEditing,
                         decoration: InputDecoration(
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Appcolor.textPrimary, width: 2),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
                             hintStyle: TextStyle(color: Appcolor.textPrimary),
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 10),
@@ -167,6 +180,13 @@ class _JadwalpageState extends State<Profilpage> {
                       TextFormField(
                         readOnly: isEditing,
                         decoration: InputDecoration(
+                            focusColor: Appcolor.textPrimary,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                  color: Appcolor.textPrimary, width: 2),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(10)),
+                            ),
                             hintStyle: TextStyle(color: Appcolor.textPrimary),
                             contentPadding: const EdgeInsets.symmetric(
                                 vertical: 10, horizontal: 10),
@@ -186,7 +206,7 @@ class _JadwalpageState extends State<Profilpage> {
                   width: MediaQuery.of(context).size.width / 1.5,
                   child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                          backgroundColor: Appcolor.Secondary,
+                          backgroundColor: Appcolor.textPrimary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           )),
@@ -214,35 +234,6 @@ class _JadwalpageState extends State<Profilpage> {
                 SizedBox(
                   height: 20,
                 ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width / 1.5,
-                  child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.red,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          )),
-                      onPressed: () {},
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.logout,
-                            color: Appcolor.Primary,
-                          ),
-                          SizedBox(
-                            width: 10,
-                          ),
-                          Text(
-                            "Logout",
-                            style: TextStyle(
-                                fontSize: 17,
-                                color: Appcolor.Primary,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
-                      )),
-                )
               ],
             ),
           ),

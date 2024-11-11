@@ -9,7 +9,7 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:projectrekammedis/Component/AppColor.dart';
 
-import '../Auth_Detect_face/Auth_face.dart';
+import '../Auth/Auth_face.dart';
 import '../Login/Login.dart';
 
 class Sign extends StatefulWidget {
@@ -87,6 +87,8 @@ class _SignState extends State<Sign> {
       User? user = userCredential.user;
 
       if (user != null) {
+        print("Ingin buat akun ...");
+
         await firestore.collection('users').doc(user.uid).set({
           'email': user.email,
           'name': _nameController.text,
@@ -104,6 +106,11 @@ class _SignState extends State<Sign> {
         _showSuccessDialog("Akun Berhasil Di Buat");
       }
     } on FirebaseAuthException catch (e) {
+      print(
+          "Error code: ${e.code}"); // Tambahkan ini untuk melihat kode kesalahan
+      print(
+          "Error message: ${e.message}"); // Tambahkan ini untuk melihat pesan kesalahan
+
       Navigator.of(context).pop();
       switch (e.code) {
         case "email-already-in-use":
@@ -125,6 +132,8 @@ class _SignState extends State<Sign> {
         case 'wrong-password':
           _showErrorDialog('Password salah.');
           break;
+        case "network-request-failed":
+          _showErrorDialog("Tidak ada koneksi internet");
 
         default:
           _showErrorDialog('Check fields again');
@@ -237,7 +246,7 @@ class _SignState extends State<Sign> {
                             focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
-                                  color: Appcolor.Secondary,
+                                  color: Appcolor.textPrimary,
                                   width: 2,
                                 )),
                             contentPadding: EdgeInsets.symmetric(vertical: 10),
@@ -245,9 +254,9 @@ class _SignState extends State<Sign> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             prefixIcon:
-                                Icon(Icons.person, color: Appcolor.Secondary),
+                                Icon(Icons.person, color: Appcolor.textPrimary),
                             hintText: "Masukan nama ",
-                            hintStyle: const TextStyle(color: Colors.grey),
+                            hintStyle: TextStyle(color: Appcolor.textPrimary),
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
@@ -271,7 +280,7 @@ class _SignState extends State<Sign> {
                             focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
-                                  color: Appcolor.Secondary,
+                                  color: Appcolor.textPrimary,
                                   width: 2,
                                 )),
                             contentPadding: EdgeInsets.symmetric(vertical: 10),
@@ -279,8 +288,8 @@ class _SignState extends State<Sign> {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             prefixIcon:
-                                Icon(Icons.email, color: Appcolor.Secondary),
-                            hintStyle: const TextStyle(color: Colors.grey),
+                                Icon(Icons.email, color: Appcolor.textPrimary),
+                            hintStyle: TextStyle(color: Appcolor.textPrimary),
                             hintText: "Masukan Email",
                           ),
                           validator: (value) {
@@ -311,8 +320,8 @@ class _SignState extends State<Sign> {
                             contentPadding:
                                 const EdgeInsets.symmetric(vertical: 10),
                             prefixIcon: const Icon(Icons.phone,
-                                color: Appcolor.Secondary),
-                            hintStyle: const TextStyle(color: Colors.grey),
+                                color: Appcolor.textPrimary),
+                            hintStyle: TextStyle(color: Appcolor.textPrimary),
                             prefixStyle: const TextStyle(
                                 color: Appcolor.textPrimary, fontSize: 15),
                             hintText:
@@ -324,7 +333,7 @@ class _SignState extends State<Sign> {
                             focusedBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10),
                               borderSide: const BorderSide(
-                                  color: Appcolor.Secondary, width: 2),
+                                  color: Appcolor.textPrimary, width: 2),
                             ),
                           ),
                           validator: (value) {
@@ -367,7 +376,7 @@ class _SignState extends State<Sign> {
                                     : _selectRole == "Pasien"
                                         ? Icons.account_circle
                                         : Icons.people,
-                                color: Appcolor.Secondary,
+                                color: Appcolor.textPrimary,
                               ),
                               SizedBox(
                                 width: 15,
@@ -382,7 +391,8 @@ class _SignState extends State<Sign> {
                                       child: Text(
                                         "Pilih Peran",
                                         style: TextStyle(
-                                            color: Appcolor.textPrimary),
+                                            color: Appcolor.textPrimary,
+                                            fontWeight: FontWeight.bold),
                                       ),
                                     ),
                                     alignment: Alignment
@@ -390,13 +400,13 @@ class _SignState extends State<Sign> {
                                     menuWidth:
                                         MediaQuery.of(context).size.width / 3,
                                     icon: Icon(Icons.keyboard_arrow_down,
-                                        color: Appcolor.Secondary),
+                                        color: Appcolor.textPrimary),
                                     underline: Container(),
-                                    dropdownColor: Appcolor.Card,
+                                    dropdownColor: Appcolor.Primary,
                                     borderRadius: BorderRadius.circular(10),
                                     isExpanded: true,
                                     style: const TextStyle(
-                                        color: Appcolor.textPrimary),
+                                        color: Appcolor.Primary),
                                     items: [
                                       DropdownMenuItem(
                                         child: Text("Pasien",
@@ -441,7 +451,7 @@ class _SignState extends State<Sign> {
                             focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(10),
                                 borderSide: const BorderSide(
-                                  color: Appcolor.Secondary,
+                                  color: Appcolor.textPrimary,
                                   width: 2,
                                 )),
                             contentPadding:
@@ -453,9 +463,9 @@ class _SignState extends State<Sign> {
                             hintText: "Masukan password",
                             prefixIcon: const Icon(
                               Icons.lock,
-                              color: Appcolor.Secondary,
+                              color: Appcolor.textPrimary,
                             ),
-                            hintStyle: const TextStyle(color: Colors.grey),
+                            hintStyle: TextStyle(color: Appcolor.textPrimary),
                             suffixIcon: IconButton(
                               onPressed: () {
                                 setState(() {
@@ -467,7 +477,7 @@ class _SignState extends State<Sign> {
                                     ? Icons.visibility_off
                                     : Icons.visibility,
                               ),
-                              color: Appcolor.Secondary,
+                              color: Appcolor.textPrimary,
                             ),
                           ),
                           validator: (value) {
@@ -502,147 +512,155 @@ class _SignState extends State<Sign> {
                                   )
                           ],
                         ),
-                        SizedBox(
-                          width: 400,
-                          height: 50,
-                          child: ElevatedButton(
-                              style: ElevatedButton.styleFrom(
-                                elevation: 0,
-                                backgroundColor: Colors.transparent,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(10),
+                        Center(
+                          child: SizedBox(
+                            width: 50,
+                            height: 50,
+                            child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  elevation: 0,
+                                  padding: EdgeInsets.zero,
+                                  // backgroundColor: Colors.transparent,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(10),
+                                  ),
                                 ),
-                              ),
-                              onPressed: () async {
-                                await showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return AlertDialog(
-                                        backgroundColor: Appcolor.Card,
-                                        elevation: 10,
-                                        title: Center(
-                                          child: Text(
-                                            "Face ID",
-                                            style: TextStyle(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                                color: Appcolor.textPrimary),
+                                onPressed: () async {
+                                  await showDialog(
+                                      context: context,
+                                      builder: (BuildContext context) {
+                                        return AlertDialog(
+                                          backgroundColor: Appcolor.Primary,
+                                          elevation: 10,
+                                          title: Center(
+                                            child: Text(
+                                              "Face ID",
+                                              style: TextStyle(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: Colors.black),
+                                            ),
                                           ),
-                                        ),
-                                        content: SizedBox(
-                                          height: 200,
-                                          child: Column(
-                                            children: [
-                                              Text(
-                                                "Daftar wajah anda untuk keamanan yang lebih baik",
-                                                textAlign: TextAlign.center,
-                                                style: TextStyle(
-                                                    color: Appcolor.textPrimary,
-                                                    fontSize: 12),
-                                              ),
-                                              SizedBox(
-                                                height: 20,
-                                              ),
-                                              SizedBox(
-                                                height: 70,
-                                                width: 70,
-                                                child: Image.asset(
-                                                    "Images/Logo/Face_Id.png"),
-                                              ),
-                                              SizedBox(
-                                                height: 20,
-                                              ),
-                                              ElevatedButton(
-                                                style: ElevatedButton.styleFrom(
-                                                  backgroundColor:
-                                                      Appcolor.Secondary,
-                                                  shape: RoundedRectangleBorder(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            10),
-                                                  ),
+                                          content: SizedBox(
+                                            height: 200,
+                                            child: Column(
+                                              children: [
+                                                Text(
+                                                  "Daftar wajah anda untuk keamanan yang lebih baik",
+                                                  textAlign: TextAlign.center,
+                                                  style: TextStyle(
+                                                      color: Colors.black,
+                                                      fontSize: 12),
                                                 ),
-                                                onPressed: () async {
-                                                  result = await Get.to(
-                                                      () => AuthFace());
+                                                SizedBox(
+                                                  height: 20,
+                                                ),
+                                                SizedBox(
+                                                  height: 70,
+                                                  width: 70,
+                                                  child: Image.asset(
+                                                      "Images/Logo/Face_Id.png"),
+                                                ),
+                                                SizedBox(
+                                                  height: 20,
+                                                ),
+                                                ElevatedButton(
+                                                  style:
+                                                      ElevatedButton.styleFrom(
+                                                    backgroundColor:
+                                                        Appcolor.textPrimary,
+                                                    shape:
+                                                        RoundedRectangleBorder(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              10),
+                                                    ),
+                                                  ),
+                                                  onPressed: () async {
+                                                    result = await Get.to(
+                                                        () => AuthFace());
 
-                                                  Navigator.of(context).pop();
-                                                  if (result != null) {
-                                                    setState(() {
-                                                      isDialogOpen = false;
-                                                    });
-                                                    // Tampilkan dialog baru dengan pesan berhasil
-                                                    showDialog(
-                                                      context: context,
-                                                      builder: (BuildContext
-                                                          context) {
-                                                        return AlertDialog(
-                                                            backgroundColor:
-                                                                Appcolor.Card,
-                                                            elevation: 10,
-                                                            title: Text(
-                                                              "Berhasil",
-                                                              textAlign:
-                                                                  TextAlign
-                                                                      .center,
-                                                              style: TextStyle(
-                                                                fontSize: 20,
-                                                                fontWeight:
-                                                                    FontWeight
-                                                                        .bold,
-                                                                color: Colors
-                                                                    .green,
+                                                    Navigator.of(context).pop();
+                                                    if (result != null) {
+                                                      setState(() {
+                                                        isDialogOpen = false;
+                                                      });
+                                                      // Tampilkan dialog baru dengan pesan berhasil
+                                                      showDialog(
+                                                        context: context,
+                                                        builder: (BuildContext
+                                                            context) {
+                                                          return AlertDialog(
+                                                              backgroundColor:
+                                                                  Appcolor
+                                                                      .textPrimary,
+                                                              elevation: 10,
+                                                              title: Text(
+                                                                "Berhasil",
+                                                                textAlign:
+                                                                    TextAlign
+                                                                        .center,
+                                                                style:
+                                                                    TextStyle(
+                                                                  fontSize: 20,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                  color: Colors
+                                                                      .green,
+                                                                ),
                                                               ),
-                                                            ),
-                                                            content: Column(
-                                                              mainAxisSize:
-                                                                  MainAxisSize
-                                                                      .min,
-                                                              children: [
-                                                                Text(
-                                                                  "Daftar wajah berhasil",
-                                                                  style: TextStyle(
-                                                                      color: Appcolor
-                                                                          .textPrimary),
-                                                                  textAlign:
-                                                                      TextAlign
-                                                                          .center,
-                                                                ),
-                                                                SizedBox(
-                                                                  height: 20,
-                                                                ),
-                                                                Image.asset(
-                                                                    "Images/Logo/Check.png",
-                                                                    width: 70,
-                                                                    height: 70),
-                                                              ],
-                                                            ));
-                                                      },
-                                                    );
-                                                  }
-                                                },
-                                                child: Text("Face ID",
-                                                    style: TextStyle(
-                                                        color:
-                                                            Appcolor.Primary)),
-                                              )
-                                            ],
+                                                              content: Column(
+                                                                mainAxisSize:
+                                                                    MainAxisSize
+                                                                        .min,
+                                                                children: [
+                                                                  Text(
+                                                                    "Daftar wajah berhasil",
+                                                                    style: TextStyle(
+                                                                        color: Appcolor
+                                                                            .textPrimary),
+                                                                    textAlign:
+                                                                        TextAlign
+                                                                            .center,
+                                                                  ),
+                                                                  SizedBox(
+                                                                    height: 20,
+                                                                  ),
+                                                                  Image.asset(
+                                                                      "Images/Logo/Check.png",
+                                                                      width: 70,
+                                                                      height:
+                                                                          70),
+                                                                ],
+                                                              ));
+                                                        },
+                                                      );
+                                                    }
+                                                  },
+                                                  child: Text("Face ID",
+                                                      style: TextStyle(
+                                                          color: Appcolor
+                                                              .Primary)),
+                                                )
+                                              ],
+                                            ),
                                           ),
-                                        ),
-                                      );
-                                    });
-                              },
-                              child: Container(
-                                padding: const EdgeInsets.all(10),
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Appcolor.Card,
-                                ),
-                                child: Image.asset(
-                                  "Images/Logo/Face_Id.png",
-                                  fit: BoxFit.cover,
-                                ),
-                              )),
+                                        );
+                                      });
+                                },
+                                child: Container(
+                                  padding: const EdgeInsets.all(10),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(10),
+                                    color: Appcolor.textPrimary,
+                                  ),
+                                  child: Image.asset(
+                                    "Images/Logo/Face_Id.png",
+                                    fit: BoxFit.cover,
+                                  ),
+                                )),
+                          ),
                         ),
                         const SizedBox(height: 15),
                         Center(
@@ -667,7 +685,7 @@ class _SignState extends State<Sign> {
                               child: const Text(
                                 "Login sekarang",
                                 style: TextStyle(
-                                  color: Appcolor.Secondary,
+                                  color: Appcolor.textPrimary,
                                 ),
                               ),
                             ),
@@ -722,7 +740,7 @@ class SubmitButton extends StatelessWidget {
       height: 50,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: Appcolor.Secondary,
+          backgroundColor: Appcolor.textPrimary,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10),
           ),

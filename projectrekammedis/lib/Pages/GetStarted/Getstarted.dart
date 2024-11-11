@@ -174,7 +174,7 @@ class Slide_1 extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          "MomEase membantu Anda memantau kesehatan kehamilan dengan mudah, mulai dari:",
+          "MomEase membantu Anda memantau kesehatan kehamilan dengan mudah",
           style: TextStyle(
               color: Appcolor.textPrimary,
               fontSize: 30,

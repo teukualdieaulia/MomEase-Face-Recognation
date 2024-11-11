@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:projectrekammedis/Component/AppColor.dart';
 import 'package:salomon_bottom_bar/salomon_bottom_bar.dart';
-import 'package:dot_navigation_bar/dot_navigation_bar.dart';
 
 class Bottomnavigation extends StatelessWidget {
   const Bottomnavigation({super.key, required this.currentIndex});
@@ -16,7 +15,7 @@ class Bottomnavigation extends StatelessWidget {
         Get.toNamed('/Riwayatpage');
         break;
       case 2:
-        Get.toNamed('/Keluhanpage');
+        Get.toNamed('/Kuisionerpage');
         break;
       case 3:
         Get.toNamed('/Jadwalpage');
@@ -27,39 +26,39 @@ class Bottomnavigation extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SalomonBottomBar(
-        backgroundColor: Appcolor.Card,
+        backgroundColor: Appcolor.textPrimary,
         itemShape:
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-        selectedItemColor: Appcolor.Secondary,
+        selectedItemColor: Appcolor.Primary,
         currentIndex: currentIndex,
         onTap: _onItemTapped,
         items: [
           SalomonBottomBarItem(
               icon: Icon(
                 Icons.home,
-                color: Appcolor.Secondary,
+                color: Colors.black87,
               ),
               title: Text(
                 'Home',
-                style: TextStyle(color: Appcolor.Secondary),
+                style: TextStyle(color: Colors.black87),
               )),
           SalomonBottomBarItem(
-              icon: Icon(Icons.history, color: Appcolor.Secondary),
+              icon: Icon(Icons.history, color: Colors.black87),
               title: Text(
                 'Riwayat',
-                style: TextStyle(color: Appcolor.Secondary),
+                style: TextStyle(color: Colors.black87),
               )),
           SalomonBottomBarItem(
-              icon: Icon(Icons.question_answer, color: Appcolor.Secondary),
+              icon: Icon(Icons.quiz, color: Colors.black87),
               title: Text(
                 'kuisioner',
-                style: TextStyle(color: Appcolor.Secondary),
+                style: TextStyle(color: Colors.black87),
               )),
           SalomonBottomBarItem(
-              icon: Icon(Icons.calendar_month, color: Appcolor.Secondary),
+              icon: Icon(Icons.calendar_month, color: Colors.black87),
               title: Text(
                 'Jadwal',
-                style: TextStyle(color: Appcolor.Secondary),
+                style: TextStyle(color: Colors.black87),
               )),
         ]);
   }

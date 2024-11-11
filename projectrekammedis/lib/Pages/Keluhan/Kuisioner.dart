@@ -5,14 +5,14 @@ import 'package:projectrekammedis/Component/AppColor.dart';
 import '../../Component/NavBattom.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
-class Keluhanpage extends StatefulWidget {
-  const Keluhanpage({super.key});
+class Kuisionerpage extends StatefulWidget {
+  const Kuisionerpage({super.key});
 
   @override
-  State<Keluhanpage> createState() => _KeluhanpageState();
+  State<Kuisionerpage> createState() => _KuisionerpageState();
 }
 
-class _KeluhanpageState extends State<Keluhanpage> {
+class _KuisionerpageState extends State<Kuisionerpage> {
   int currentIndex = 0;
   bool _isFinished = false;
 
@@ -24,7 +24,7 @@ class _KeluhanpageState extends State<Keluhanpage> {
       "options": ["0 - 3 bulan", "4 - 6 bulan", "7 - 9 bulan"]
     },
     {
-      "question": "Apakah anda mengalami keluhan saat ini?",
+      "question": "Apakah anda mengalami Kuisioner saat ini?",
       "options": ["Ya", "Tidak"]
     },
     {
@@ -84,7 +84,7 @@ class _KeluhanpageState extends State<Keluhanpage> {
         body: Padding(
           padding: const EdgeInsets.only(bottom: 30),
           child: _isFinished
-              ? HalamanSelesaiKeluhan()
+              ? HalamanSelesaiKuisioner()
               : Column(
                   children: [
                     Container(
@@ -106,7 +106,7 @@ class _KeluhanpageState extends State<Keluhanpage> {
                                   width:
                                       MediaQuery.of(context).size.width / 3.5),
                               Text(
-                                "Keluhan",
+                                "Kuisioner",
                                 style: TextStyle(
                                     fontWeight: FontWeight.bold,
                                     fontSize: 20,
@@ -178,12 +178,7 @@ class _KeluhanpageState extends State<Keluhanpage> {
                       margin: EdgeInsets.symmetric(horizontal: 13),
                       width: double.infinity,
                       decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [
-                              Appcolor.Secondary,
-                              const Color.fromARGB(255, 102, 212, 113)
-                            ],
-                          ),
+                          color: Appcolor.textPrimary,
                           borderRadius: BorderRadius.circular(10)),
                       child: ElevatedButton(
                           style: ElevatedButton.styleFrom(
@@ -199,7 +194,9 @@ class _KeluhanpageState extends State<Keluhanpage> {
                           child: Text(
                             currentIndex + 1 == 10 ? "Selesai" : "Lanjut",
                             style: TextStyle(
-                                color: Appcolor.Primary, fontSize: 17),
+                                color: Appcolor.Primary,
+                                fontSize: 17,
+                                fontWeight: FontWeight.bold),
                           )),
                     )
                   ],
@@ -208,8 +205,8 @@ class _KeluhanpageState extends State<Keluhanpage> {
   }
 }
 
-class HalamanSelesaiKeluhan extends StatelessWidget {
-  const HalamanSelesaiKeluhan({
+class HalamanSelesaiKuisioner extends StatelessWidget {
+  const HalamanSelesaiKuisioner({
     super.key,
   });
 
@@ -231,11 +228,11 @@ class HalamanSelesaiKeluhan extends StatelessWidget {
                       onPressed: () {},
                       icon: Icon(
                         Icons.arrow_back_ios_new,
-                        color: Colors.white,
+                        color: Appcolor.Primary,
                       )),
                   SizedBox(width: MediaQuery.of(context).size.width / 5),
                   Text(
-                    "Keluhan selesai",
+                    "Kuisioner selesai",
                     style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
@@ -248,6 +245,7 @@ class HalamanSelesaiKeluhan extends StatelessWidget {
               ),
               CircularPercentIndicator(
                 radius: 90,
+                progressColor: Appcolor.Primary,
                 backgroundColor: Colors.white10,
                 lineWidth: 30,
                 center: Text("10/10",
@@ -258,10 +256,6 @@ class HalamanSelesaiKeluhan extends StatelessWidget {
                 animation: true,
                 percent: 0.8,
                 circularStrokeCap: CircularStrokeCap.round,
-                linearGradient: LinearGradient(colors: [
-                  const Color.fromARGB(255, 102, 212, 113),
-                  Appcolor.Secondary,
-                ], begin: Alignment.topCenter, end: Alignment.bottomCenter),
               ),
               SizedBox(
                 height: 40,
@@ -290,7 +284,7 @@ class HalamanSelesaiKeluhan extends StatelessWidget {
                   height: 10,
                 ),
                 Text(
-                  "Keluhan telah selesai",
+                  "Kuisioner telah selesai",
                   style: TextStyle(
                     color: Colors.black,
                     fontSize: 18,
@@ -299,7 +293,7 @@ class HalamanSelesaiKeluhan extends StatelessWidget {
                 SizedBox(
                   height: 15,
                 ),
-                Text("terima kasih telah mengisi keluhan anda"),
+                Text("terima kasih telah mengisi Kuisioner anda"),
                 SizedBox(
                   height: 15,
                 ),
@@ -328,12 +322,7 @@ class HalamanSelesaiKeluhan extends StatelessWidget {
           height: 45,
           margin: EdgeInsets.symmetric(horizontal: 13),
           decoration: BoxDecoration(
-              gradient: LinearGradient(
-                colors: [
-                  Appcolor.Secondary,
-                  const Color.fromARGB(255, 162, 253, 171)
-                ],
-              ),
+              color: Appcolor.textPrimary,
               borderRadius: BorderRadius.circular(10)),
           child: ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -395,7 +384,7 @@ class Pertanyaan extends StatelessWidget {
                   option,
                 ),
                 trailing: Radio(
-                  activeColor: const Color.fromARGB(255, 72, 167, 81),
+                  activeColor: Appcolor.Primary,
                   value: option,
                   groupValue: selectedOption,
                   onChanged: (value) {

@@ -14,8 +14,6 @@ class Biodatapage extends StatefulWidget {
 }
 
 class _BiodatapageState extends State<Biodatapage> {
-  final noRegisterController = TextEditingController();
-  final namaController = TextEditingController();
   final nikController = TextEditingController();
   final alamatController = TextEditingController();
   final bpjsController = TextEditingController();
@@ -40,8 +38,7 @@ class _BiodatapageState extends State<Biodatapage> {
 
     if (userData != null && userData!['Biodata'] != null) {
       var biodata = userData!['Biodata'];
-      noRegisterController.text = biodata['no_register'] ?? "";
-      namaController.text = biodata['name'] ?? "";
+
       nikController.text = biodata['nik'] ?? "";
       alamatController.text = biodata['address'] ?? "";
       bpjsController.text = biodata['bpjs'] ?? "";
@@ -54,8 +51,6 @@ class _BiodatapageState extends State<Biodatapage> {
     try {
       _ShowDialogProgress();
       Biodata = {
-        'no_register': noRegisterController.text,
-        'name': namaController.text,
         'nik': nikController.text,
         'address': alamatController.text,
         'bpjs': bpjsController.text,
@@ -100,7 +95,7 @@ class _BiodatapageState extends State<Biodatapage> {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Color(0xFF0B8FAC),
+              color: Appcolor.textPrimary,
             ),
           ),
           content: Column(
@@ -161,7 +156,7 @@ class _BiodatapageState extends State<Biodatapage> {
             padding: EdgeInsets.all(20),
             width: 160, // Atur lebar container agar tidak terlalu besar
             decoration: BoxDecoration(
-              color: Appcolor.Card,
+              color: Appcolor.Primary,
               borderRadius: BorderRadius.circular(15),
               boxShadow: [
                 BoxShadow(
@@ -209,7 +204,10 @@ class _BiodatapageState extends State<Biodatapage> {
           automaticallyImplyLeading: false,
           actions: [
             IconButton(
-              icon: Icon(Icons.mode_edit_outline),
+              icon: Icon(
+                Icons.mode_edit_outline,
+                color: Appcolor.textPrimary,
+              ),
               onPressed: () {
                 setState(() {
                   _isReadonly = false;
@@ -222,8 +220,8 @@ class _BiodatapageState extends State<Biodatapage> {
             onPressed: () => Get.offAllNamed('/Settingspage'),
           ),
           elevation: 0,
-          backgroundColor: Appcolor.Card,
-          foregroundColor: Appcolor.textPrimary,
+          backgroundColor: Appcolor.Primary,
+          foregroundColor: Appcolor.Primary,
           scrolledUnderElevation: 0,
           centerTitle: true,
           title: const Text(
@@ -244,46 +242,11 @@ class _BiodatapageState extends State<Biodatapage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      const Text(
-                        "No Register",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Appcolor.textPrimary),
+                      Center(
+                        child: Text("Lengkapi data kalian di bawah ini",
+                            style: TextStyle(color: Appcolor.textPrimary)),
                       ),
                       const SizedBox(height: 10),
-                      CustomFormField(
-                        isReadonly: _isReadonly,
-                        controller: noRegisterController,
-                        icon: const Icon(Icons.note_alt_outlined),
-                        hintText: "Masukan No Register",
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Silahkan masukan no register';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 15),
-                      const Text(
-                        "Nama",
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Appcolor.textPrimary),
-                      ),
-                      const SizedBox(height: 10),
-                      CustomFormField(
-                        isReadonly: _isReadonly,
-                        controller: namaController,
-                        icon: const Icon(Icons.person),
-                        hintText: "Masukan Nama Pasien",
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Silahkan masukan Nama Pasien';
-                          }
-                          return null;
-                        },
-                      ),
-                      const SizedBox(height: 15),
                       const Text(
                         "NIK",
                         style: TextStyle(
@@ -396,7 +359,7 @@ class _BiodatapageState extends State<Biodatapage> {
                         borderRadius: BorderRadius.all(Radius.circular(10)),
                       ),
                       backgroundColor:
-                          _isReadonly ? Colors.grey : Appcolor.Secondary,
+                          _isReadonly ? Colors.grey : Appcolor.textPrimary,
                     ),
                     onPressed: () {
                       if (_isReadonly == false) {
@@ -444,7 +407,7 @@ class CustomFormField extends StatelessWidget {
       readOnly: isReadonly,
       controller: controller,
       style: const TextStyle(color: Appcolor.textPrimary),
-      cursorColor: Appcolor.Secondary,
+      cursorColor: Appcolor.textPrimary,
       autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
         contentPadding: const EdgeInsets.symmetric(vertical: 10),
@@ -453,13 +416,13 @@ class CustomFormField extends StatelessWidget {
         ),
         focusedBorder: const OutlineInputBorder(
           borderRadius: BorderRadius.all(Radius.circular(10)),
-          borderSide: BorderSide(color: Appcolor.Secondary),
+          borderSide: BorderSide(color: Appcolor.textPrimary),
         ),
         hintText: hintText,
         hintStyle: const TextStyle(color: Colors.grey),
         prefixIcon: Icon(
           icon.icon,
-          color: Appcolor.Secondary,
+          color: Appcolor.textPrimary,
         ),
       ),
       validator: validator,

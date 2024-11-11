@@ -11,7 +11,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:http/http.dart' as http;
 import 'package:projectrekammedis/Component/AppColor.dart';
 import 'package:projectrekammedis/Pages/Home/HomePage.dart';
-import '../Auth_Detect_face/login_face.dart';
+import '../Auth/login_face.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class Login extends StatefulWidget {
@@ -93,7 +93,8 @@ class _LoginState extends State<Login> {
           "image2": image2Base64,
         }),
       )
-          .timeout(Duration(seconds: 40), onTimeout: () {
+          .timeout(Duration(seconds: 80), onTimeout: () {
+        Navigator.of(context).pop();
         return http.Response('Timeout', 408);
       });
       Navigator.of(context).pop();
@@ -140,6 +141,14 @@ class _LoginState extends State<Login> {
 
       if (user != null) {
         await authenticateFaces(user.uid);
+        // DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        //     .collection("users")
+        //     .doc(user.uid)
+        //     .get();
+        // userData = userDoc.data() as Map<String, dynamic>;
+        // await box.write(user.uid, userData);
+        // await box.write("uidAktif", user.uid);
+        // _showSuccessDialog("Login Berhasil");
       } else {
         Navigator.of(context).pop();
         _showErrorDialog("Username atau Password salah");
@@ -188,7 +197,7 @@ class _LoginState extends State<Login> {
             padding: EdgeInsets.all(20),
             width: 160, // Atur lebar container agar tidak terlalu besar
             decoration: BoxDecoration(
-              color: Appcolor.Card,
+              color: Appcolor.Primary,
               borderRadius: BorderRadius.circular(15),
               boxShadow: [
                 BoxShadow(
@@ -204,9 +213,9 @@ class _LoginState extends State<Login> {
               children: [
                 LoadingAnimationWidget.inkDrop(
                   color: Appcolor.textPrimary,
-                  size: 40,
+                  size: 50,
                 ),
-                SizedBox(height: 15),
+                SizedBox(height: 20),
                 Text(
                   "Loading...",
                   style: TextStyle(
@@ -302,7 +311,7 @@ class _LoginState extends State<Login> {
       child: Scaffold(
         backgroundColor: Appcolor.Primary,
         appBar: AppBar(
-          backgroundColor: Appcolor.Card,
+          backgroundColor: Appcolor.Primary,
           centerTitle: true,
           leading: IconButton(
             onPressed: () {},
@@ -350,14 +359,21 @@ class _LoginState extends State<Login> {
                     ),
                     const SizedBox(height: 5),
                     TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       style: const TextStyle(color: Appcolor.textPrimary),
                       controller: textControllerEmail,
                       decoration: InputDecoration(
-                        hintText: "Masukan email...",
-                        hintStyle: const TextStyle(color: Colors.grey),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                            color: Appcolor.textPrimary,
+                          ),
+                        ),
+                        hintText: "Masukan email",
+                        hintStyle: const TextStyle(color: Appcolor.textPrimary),
                         prefixIcon: const Icon(
                           Icons.mail_outline,
-                          color: Appcolor.Secondary,
+                          color: Appcolor.textPrimary,
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -382,15 +398,23 @@ class _LoginState extends State<Login> {
                     ),
                     const SizedBox(height: 5),
                     TextFormField(
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
                       style: const TextStyle(color: Appcolor.textPrimary),
                       controller: textControllerPass,
                       obscureText: _obscureText,
+                      cursorColor: Appcolor.textPrimary,
                       decoration: InputDecoration(
-                        hintText: "Masukan password...",
-                        hintStyle: const TextStyle(color: Colors.grey),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          borderSide: const BorderSide(
+                            color: Appcolor.textPrimary,
+                          ),
+                        ),
+                        hintText: "Masukan password",
+                        hintStyle: const TextStyle(color: Appcolor.textPrimary),
                         prefixIcon: const Icon(
                           Icons.lock_outline,
-                          color: Appcolor.Secondary,
+                          color: Appcolor.textPrimary,
                         ),
                         suffixIcon: IconButton(
                           onPressed: () {
@@ -401,7 +425,7 @@ class _LoginState extends State<Login> {
                           icon: Icon(_obscureText
                               ? Icons.visibility_off
                               : Icons.visibility),
-                          color: Appcolor.Secondary,
+                          color: Appcolor.textPrimary,
                         ),
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -421,7 +445,7 @@ class _LoginState extends State<Login> {
                           onPressed: () {},
                           child: const Text(
                             "Forgot Password?",
-                            style: TextStyle(color: Appcolor.Secondary),
+                            style: TextStyle(color: Appcolor.textPrimary),
                           ),
                         ),
                       ],
@@ -434,7 +458,7 @@ class _LoginState extends State<Login> {
                         style: ElevatedButton.styleFrom(
                           elevation: 10,
                           shadowColor: Colors.black,
-                          backgroundColor: Appcolor.Secondary,
+                          backgroundColor: Appcolor.textPrimary,
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(10),
                           ),
@@ -493,7 +517,9 @@ class _LoginState extends State<Login> {
                               },
                               child: Text(
                                 "Daftar sekarang",
-                                style: TextStyle(color: Appcolor.Secondary),
+                                style: TextStyle(
+                                    color: Appcolor.textPrimary,
+                                    fontWeight: FontWeight.bold),
                               ),
                             ),
                           ],

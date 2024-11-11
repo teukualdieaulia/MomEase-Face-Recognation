@@ -70,7 +70,7 @@ def authenticate():
     print(f"Hitung jarak membutuhkan waktu {end_distance_time - start_distance_time} detik")
     
     # Threshold untuk FaceNet biasanya di sekitar 1.0, bisa disesuaikan
-    threshold = 6.5
+    threshold = 8.5
     if distance < threshold:
         return jsonify({"status": "sukses", "message": "Autentikasi berhasil"})
     else:

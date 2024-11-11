@@ -1,17 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:projectrekammedis/Pages/Auth_Detect_face/Auth_face.dart';
+import 'package:projectrekammedis/Pages/Auth/Auth_face.dart';
 import 'Component/test.dart';
-import 'Pages/Auth_Detect_face/login_face.dart';
+import 'Pages/Auth/ChangePassword.dart';
+import 'Pages/Auth/CheckYourEmail.dart';
+import 'Pages/Auth/login_face.dart';
 import 'Pages/Biodata/BiodataPage.dart';
 import 'Pages/GetStarted/Getstarted.dart';
 import 'Pages/Home/HomePage.dart';
 import 'Pages/Jadwal/JadwalPage.dart';
-import 'Pages/Keluhan/KeluhanPage.dart';
+import 'Pages/Keluhan/Kuisioner.dart';
 import 'Pages/Login/Login.dart';
+import 'Pages/Notifikasi/Notifikasi.dart';
 import 'Pages/Profil/EditProfil.dart';
 import 'Pages/Profil/ProfilPage.dart';
 import 'Pages/Riwayat/RiwayatPage.dart';
+import 'Pages/Settings/Ketentuanpage.dart';
 import 'Pages/Settings/SettingsPage.dart';
 import 'Pages/Sign/Sign.dart';
 import 'Pages/splashcren.dart';
@@ -36,7 +40,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       debugShowCheckedModeBanner: false,
-      initialRoute: "/Splash",
+      initialRoute: "/Homepage",
       defaultTransition: Transition.fadeIn,
       getPages: [
         GetPage(
@@ -81,8 +85,8 @@ class MyApp extends StatelessWidget {
             page: () => const Riwayatpage()),
         GetPage(
             transition: Transition.fadeIn,
-            name: "/Keluhanpage",
-            page: () => const Keluhanpage()),
+            name: "/Kuisionerpage",
+            page: () => const Kuisionerpage()),
         GetPage(
             transition: Transition.fadeIn,
             name: "/Jadwalpage",
@@ -97,8 +101,24 @@ class MyApp extends StatelessWidget {
             page: () => const Getstarted()),
         GetPage(
             transition: Transition.fadeIn,
-            name: "/EditProfil",
-            page: () => const EditProfil()),
+            name: "/Profilpage",
+            page: () => const Profilpage()),
+        GetPage(
+            transition: Transition.fadeIn,
+            name: "/Changepassword",
+            page: () => const Changepassword()),
+        GetPage(
+            transition: Transition.fadeIn,
+            name: "/Checkyouremail",
+            page: () => const Checkyouremail()),
+        GetPage(
+            transition: Transition.fadeIn,
+            name: "/Ketentuanpage",
+            page: () => const Ketentuanpage()),
+        GetPage(
+            transition: Transition.fadeIn,
+            name: "/Notifikasi",
+            page: () => const Notifikasi()),
       ],
     );
   }

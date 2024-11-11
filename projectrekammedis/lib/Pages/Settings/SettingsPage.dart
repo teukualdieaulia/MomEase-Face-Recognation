@@ -70,7 +70,7 @@ class _SettingspageState extends State<Settingspage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          backgroundColor: Appcolor.Card,
+          backgroundColor: Appcolor.Primary,
           centerTitle: true,
           title: Text(
             "Settings",
@@ -86,7 +86,7 @@ class _SettingspageState extends State<Settingspage> {
             children: [
               Container(
                 decoration: BoxDecoration(
-                  color: Appcolor.Card,
+                  color: Appcolor.textPrimary,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: lisTileAccount(
@@ -99,7 +99,7 @@ class _SettingspageState extends State<Settingspage> {
                 padding: EdgeInsets.all(15),
                 width: double.infinity,
                 decoration: BoxDecoration(
-                  color: Appcolor.Card,
+                  color: Appcolor.textPrimary,
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Column(
@@ -108,23 +108,22 @@ class _SettingspageState extends State<Settingspage> {
                     Text(
                       "General",
                       style: TextStyle(
-                          color: Appcolor.textPrimary,
+                          color: Colors.black,
                           fontSize: 18,
                           fontWeight: FontWeight.bold),
                     ),
                     lisTileCard(
-                      onTap: () => Get.toNamed('/EditProfil'),
+                      onTap: () => Get.toNamed('/Profilpage'),
                       leading: Icon(Icons.person,
-                          color:
-                              Appcolor.textPrimary), // Ikon untuk "Edit Profil"
+                          color: Appcolor.Primary), // Ikon untuk "Edit Profil"
                       title: "Edit Profil",
                       subtitle: "Ganti foto profil, nomor, dan E-mail",
                     ),
                     lisTileCard(
-                      onTap: () => Get.toNamed('/GantiPassword'),
+                      onTap: () => Get.toNamed('/Changepassword'),
                       leading: Icon(Icons.lock,
                           color: Appcolor
-                              .textPrimary), // Ikon untuk "Ganti Kata Sandi"
+                              .Primary), // Ikon untuk "Ganti Kata Sandi"
                       title: "Ganti Kata Sandi",
                       subtitle: "Perbarui dan ubah keamanan akun Anda",
                     ),
@@ -132,19 +131,21 @@ class _SettingspageState extends State<Settingspage> {
                       onTap: () => Get.toNamed('/Ketentuanpage'),
                       leading: Icon(Icons.article,
                           color: Appcolor
-                              .textPrimary), // Ikon untuk "Ketentuan Penggunaan"
+                              .Primary), // Ikon untuk "Ketentuan Penggunaan"
                       title: "Ketentuan Penggunaan",
                       subtitle:
                           "Lihat ketentuan penggunaan dan kebijakan privasi kami",
                     ),
                     lisTileCard(
                       onTap: () => Get.toNamed('/Biodatapage'),
-                      color: notif == true ? Colors.green : Colors.amber,
+                      color: notif == true
+                          ? const Color.fromARGB(255, 60, 128, 62)
+                          : Colors.amber,
                       leading: notif == true
                           ? Icon(Icons.check_circle_outline_outlined)
                           : Icon(Icons.info,
                               color: Appcolor
-                                  .textPrimary), // Ikon untuk "Lengkapi Data"
+                                  .Primary), // Ikon untuk "Lengkapi Data"
                       title: "Lengkapi Data",
                       subtitle: "Lengkapi data diri Anda",
                     ),
@@ -156,7 +157,7 @@ class _SettingspageState extends State<Settingspage> {
                   padding: EdgeInsets.all(15),
                   width: double.infinity,
                   decoration: BoxDecoration(
-                    color: Appcolor.Card,
+                    color: Appcolor.textPrimary,
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Column(
@@ -165,22 +166,21 @@ class _SettingspageState extends State<Settingspage> {
                       Text(
                         "Preferences",
                         style: TextStyle(
-                            color: Appcolor.textPrimary,
+                            color: Colors.black,
                             fontSize: 18,
                             fontWeight: FontWeight.bold),
                       ),
                       lisTileCard(
-                        onTap: () => Get.toNamed('/Notifpage'),
+                        onTap: () => Get.toNamed('/Notifikasi'),
                         leading: Icon(Icons.notifications,
-                            color: Appcolor
-                                .textPrimary), // Ikon untuk "Notifikasi"
+                            color: Appcolor.Primary), // Ikon untuk "Notifikasi"
                         title: "Notifikasi",
                         subtitle: "Kelola pengaturan notifikasi Anda",
                       ),
                       lisTileCard(
                         onTap: () => Get.toNamed('/FAQpage'),
                         leading: Icon(Icons.help_outline,
-                            color: Appcolor.textPrimary), // Ikon untuk "FAQ"
+                            color: Appcolor.Primary), // Ikon untuk "FAQ"
                         title: "FAQ",
                         subtitle: "Pertanyaan yang sering ditanyakan",
                       ),
@@ -188,9 +188,9 @@ class _SettingspageState extends State<Settingspage> {
                         onTap: () {
                           Get.offAllNamed('/Login');
                         },
-                        color: Colors.red,
+                        color: const Color.fromARGB(255, 186, 50, 41),
                         leading: Icon(Icons.exit_to_app,
-                            color: Appcolor.textPrimary), // Ikon untuk "Keluar"
+                            color: Appcolor.Primary), // Ikon untuk "Keluar"
                         title: "Keluar",
                         subtitle: "Keluar dari akun Anda",
                       ),
@@ -229,19 +229,18 @@ class lisTileAccount extends StatelessWidget {
                   )
                 : Icon(
                     Icons.person,
-                    color: Appcolor.textPrimary,
+                    color: Appcolor.Primary,
                     size: 35,
                   ),
         radius: 20,
       ),
       subtitle: Text(
         "${userData?["email"] ?? "Tamu@gmail.com"}",
-        style:
-            TextStyle(fontWeight: FontWeight.w500, color: Appcolor.textPrimary),
+        style: TextStyle(fontWeight: FontWeight.w500, color: Colors.black),
       ),
       title: Text(
         "${userData?["name"] ?? "Tamu"}",
-        style: TextStyle(fontSize: 20, color: Appcolor.textPrimary),
+        style: TextStyle(fontSize: 20, color: Colors.black),
       ),
     );
   }
@@ -271,29 +270,34 @@ class lisTileCard extends StatelessWidget {
       onTap: onTap,
       trailing: Icon(
         Icons.chevron_right,
-        color: Appcolor.textPrimary,
+        color: Colors.black,
       ),
       contentPadding: EdgeInsets.symmetric(vertical: 0),
       leading: CircleAvatar(
         radius: 19,
         backgroundColor: color != null
-            ? color!.withOpacity(0.1)
-            : Appcolor.textPrimary.withOpacity(0.1),
+            ? color!.withOpacity(0.4)
+            : Colors.grey.withOpacity(0.4),
         child: Icon(
           leading!.icon,
-          color: color != null ? color : Appcolor.textPrimary,
+          color: color != null ? color : Colors.black,
           size: 25,
         ),
       ),
       subtitle: Text(
         "${subtitle}",
         style: TextStyle(
-            fontSize: 12, fontWeight: FontWeight.w300, color: Colors.grey),
+          fontSize: 12,
+          fontWeight: FontWeight.w300,
+          color: Colors.black,
+        ),
       ),
       title: Text(
         "${title}",
         style: TextStyle(
-            fontSize: 17, color: color != null ? color : Appcolor.textPrimary),
+          fontSize: 17,
+          color: color != null ? color : Colors.black,
+        ),
       ),
     );
   }
