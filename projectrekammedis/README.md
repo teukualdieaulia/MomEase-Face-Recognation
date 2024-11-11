@@ -1,10 +1,10 @@
-Berikut adalah template `README.md` yang bisa Anda gunakan untuk proyek **MomEase**, sebuah aplikasi rekam medis yang menggunakan **face recognition** untuk autentikasi. README ini diatur agar mudah dibaca, menarik, dan memberikan informasi yang cukup tentang proyek Anda.
+Berikut adalah pembaruan `README.md` untuk proyek **MomEase** yang menggunakan **Firebase** sebagai database dan **DeepFace** untuk face recognition:
 
 ---
 
 # MomEase - Medical Record System with Face Recognition Authentication
 
-MomEase is a modern medical record management application designed for easy, secure, and efficient handling of patient records. It leverages **face recognition** technology to provide a seamless and secure authentication experience for users, ensuring that only authorized individuals have access to sensitive medical information.
+MomEase is a modern medical record management application designed for easy, secure, and efficient handling of patient records. It leverages **DeepFace** technology for facial recognition, providing a seamless and secure authentication experience to ensure that only authorized users have access to sensitive medical information.
 
 ## Table of Contents
 
@@ -20,7 +20,7 @@ MomEase is a modern medical record management application designed for easy, sec
 
 ## Features
 
-- **Face Recognition Authentication**: Secure and effortless authentication using face recognition, providing a user-friendly login experience.
+- **Face Recognition Authentication**: Secure and effortless authentication using DeepFace, providing a user-friendly login experience.
 - **Comprehensive Medical Record Management**: Record, update, and manage patient data efficiently.
 - **Data Privacy and Security**: Ensures sensitive data is protected and accessible only by authorized users.
 - **User-Friendly Interface**: A clean, intuitive design that allows easy navigation and interaction with records.
@@ -29,10 +29,9 @@ MomEase is a modern medical record management application designed for easy, sec
 ## Technology Stack
 
 - **Frontend**: Flutter
-- **Backend**: Node.js with Express
-- **Database**: MongoDB
-- **Face Recognition Library**: OpenCV or [Face Recognition API](https://github.com/ageitgey/face_recognition) (based on project requirements)
-- **Authentication**: JWT (JSON Web Token) for session management
+- **Backend**: Firebase for data storage and authentication
+- **Face Recognition**: DeepFace library for face recognition
+- **Authentication**: Firebase Authentication for user management
 - **Version Control**: Git & GitHub
 
 ## Installation
@@ -40,46 +39,42 @@ MomEase is a modern medical record management application designed for easy, sec
 ### Prerequisites
 
 1. **Flutter SDK**: Ensure Flutter is installed. You can download it from [Flutter’s official website](https://flutter.dev/docs/get-started/install).
-2. **Node.js**: Install Node.js from [Node.js official website](https://nodejs.org/).
-3. **MongoDB**: Set up MongoDB (either locally or use a cloud-based instance).
+2. **Firebase Account**: Set up a Firebase project in [Firebase Console](https://console.firebase.google.com/).
+3. **DeepFace**: Ensure you have Python installed to use DeepFace for face recognition. DeepFace can be installed via pip.
 
 ### Steps
 
 1. **Clone the repository**
 
    ```bash
-   git clone https://github.com/riskiananda90/MomEase-Face-Recognition.git
-   cd MomEase-Face-Recognition
+   git clone https://github.com/riskiananda90/MomEase-Face-Recognation.git
+   cd MomEase-Face-Recognation
    ```
 
-2. **Install dependencies**
+2. **Set Up Firebase**
+
+   - Go to your Firebase Console, create a new project, and enable **Firestore Database** and **Firebase Authentication**.
+   - Download the `google-services.json` file for Android and `GoogleService-Info.plist` for iOS and add them to the appropriate directories in your Flutter project.
+
+3. **Install Dependencies**
 
    - **Flutter dependencies**: Navigate to the Flutter project directory and run:
      ```bash
      flutter pub get
      ```
 
-   - **Backend dependencies**: Navigate to the backend directory and run:
+   - **DeepFace for Face Recognition**: Install DeepFace via pip (requires Python):
      ```bash
-     npm install
+     pip install deepface
      ```
 
-3. **Environment Variables**
+4. **Environment Variables (Optional)**
 
-   - Create a `.env` file in the backend directory with the following variables:
+   If you are using environment-specific configurations, you can set them up using `.env` files for Firebase keys, API keys, or other settings.
 
-     ```env
-     MONGODB_URI=your_mongodb_uri
-     JWT_SECRET=your_jwt_secret
-     ```
+5. **Run the Application**
 
-4. **Run the application**
-
-   - **Backend**: Start the backend server
-     ```bash
-     npm start
-     ```
-
+   - **Backend**: If there is a separate backend for any additional processing, start it here.
    - **Frontend**: Run the Flutter app
      ```bash
      flutter run
@@ -87,23 +82,21 @@ MomEase is a modern medical record management application designed for easy, sec
 
 ## Usage
 
-1. **Sign Up / Log In**: Users sign up or log in using the face recognition authentication feature. 
-2. **View Medical Records**: Authorized users can view, edit, and manage their medical records.
+1. **Sign Up / Log In**: Users can sign up or log in using face recognition. Upon login, DeepFace will verify the user’s face against the saved data in Firebase.
+2. **View Medical Records**: Authorized users can view, edit, and manage their medical records stored in Firebase Firestore.
 3. **Update Profile and Preferences**: Users can update their personal details and configure settings.
-4. **Data Security**: Sensitive information is securely stored and encrypted, accessible only to authenticated users.
+4. **Data Security**: Sensitive information is securely stored and accessible only to authenticated users.
 
 ## Project Structure
 
 ```
-MomEase-Face-Recognition/
-├── backend/                # Node.js backend for API and authentication
-│   ├── models/             # Database models
-│   ├── controllers/        # API route logic
-│   ├── routes/             # API route declarations
-│   └── .env                # Environment variables
-└── frontend/               # Flutter project
-    ├── lib/                # Main Flutter application code
-    └── assets/             # Assets like images and fonts
+MomEase-Face-Recognation/
+├── lib/                    # Main Flutter application code
+│   ├── screens/            # Screens for different pages in the app
+│   ├── services/           # Services for Firebase and DeepFace integration
+│   └── widgets/            # Custom reusable widgets
+├── assets/                 # Assets like images and fonts
+└── backend/                # (Optional) Any additional backend services
 ```
 
 ## Contributing
@@ -124,7 +117,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-By leveraging **MomEase** for medical records, healthcare providers and patients can enjoy a secure, user-friendly, and efficient way to manage and access health information, all powered by face recognition for enhanced security.
+By leveraging **MomEase** for medical records, healthcare providers and patients can enjoy a secure, user-friendly, and efficient way to manage and access health information, powered by face recognition for enhanced security.
 
 ---
 
@@ -140,4 +133,4 @@ For any questions or suggestions, feel free to reach out to the project maintain
 
 ---
 
-This README provides a clear and structured overview of the **MomEase** project, helping others understand the purpose, setup, and usage of the application.
+README ini memberikan informasi yang jelas dan terstruktur tentang proyek **MomEase**, mencakup teknologi yang digunakan, instalasi, dan cara penggunaannya.
